@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--/SKELETON-->
+<title>Visual Reference Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;700;800&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: the 6-step x L1-L8 map is the spine; every later zone is tagged with the step it serves. 1240px grid, terminal chrome. */
+/* Strict monochrome chrome so screenshots, covers and color demos are the only color on the page. */
+:root {
+  --bg: #0b0b0c;
+  --surface: #121214;
+  --raise: #1a1a1d;
+  --ink: #ececec;
+  --dim: #8f8f95;
+  --line: #2a2a2e;
+  --line-strong: #4a4a50;
+  --invert-bg: #ececec;
+  --invert-ink: #0b0b0c;
+  --scan: rgba(255,255,255,.022);
+  --ok: #8fe3a5;
+  --bad: #ff8a8a;
+  --font-display: "Chakra Petch", "Noto Sans TC", system-ui, sans-serif;
+  --font-body: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --step--1: .78rem;
+  --step-0: .94rem;
+  --step-1: 1.15rem;
+  --step-2: 1.5rem;
+  --step-3: clamp(1.9rem, 4.2vw, 3rem);
+  --step-4: clamp(2.4rem, 7vw, 4.8rem);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f1f1f0; --surface: #fafafa; --raise: #e7e7e6; --ink: #0d0d0f; --dim: #5b5b61;
+    --line: #d2d2d0; --line-strong: #9a9a9c; --invert-bg: #0d0d0f; --invert-ink: #f1f1f0;
+    --scan: rgba(0,0,0,.03); --ok: #17703a; --bad: #b42318; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f1f1f0; --surface: #fafafa; --raise: #e7e7e6; --ink: #0d0d0f; --dim: #5b5b61;
+  --line: #d2d2d0; --line-strong: #9a9a9c; --invert-bg: #0d0d0f; --invert-ink: #f1f1f0;
+  --scan: rgba(0,0,0,.03); --ok: #17703a; --bad: #b42318; color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 var(--step-0)/1.65 var(--font-body);
+  background-image: repeating-linear-gradient(0deg, var(--scan) 0 1px, transparent 1px 3px);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+img { display: block; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; }
+@media (max-width: 480px) { .wrap { padding-inline: 16px; } }
+
+/* ---------- chrome ---------- */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; align-items: center; gap: 16px; min-height: 52px; flex-wrap: wrap; }
+.brand { font: 700 var(--step-0)/1 var(--font-display); letter-spacing: .14em; text-transform: uppercase; display: flex; gap: 10px; align-items: center; text-decoration: none; }
+.brand i { width: 10px; height: 10px; background: var(--ink); animation: blink 1.6s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .15; } }
+.nav { display: flex; gap: 2px; flex-wrap: wrap; margin-left: auto; }
+.nav a { font: 500 var(--step--1)/1 var(--font-mono); text-decoration: none; padding: 8px 9px; border: 1px solid transparent; color: var(--dim); }
+.nav a:hover, .nav a.on { color: var(--ink); border-color: var(--line-strong); }
+.themebtn { font: 500 var(--step--1)/1 var(--font-mono); background: none; border: 1px solid var(--line); padding: 7px 9px; cursor: pointer; }
+.themebtn:hover { border-color: var(--ink); }
+
+section.zone { padding-block: 80px 16px; scroll-margin-top: 56px; }
+.zone-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px 48px; align-items: end; margin-bottom: 28px; }
+@media (max-width: 820px) { .zone-head { grid-template-columns: 1fr; } }
+.eyebrow { font: 500 var(--step--1)/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--dim); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.eyebrow::before { content: ""; width: 18px; height: 1px; background: var(--dim); }
+.stepref { font: 600 .68rem/1 var(--font-mono); letter-spacing: .08em; padding: 4px 6px; background: var(--invert-bg); color: var(--invert-ink); }
+h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+h2 { font-size: var(--step-3); line-height: 1.05; font-weight: 700; margin-top: 12px; }
+h3 { font-size: var(--step-1); font-weight: 600; letter-spacing: .02em; }
+.lede { color: var(--dim); max-width: 60ch; margin: 0; }
+.panel { border: 1px solid var(--line); background: var(--surface); }
+.corner { position: relative; }
+.corner::before, .corner::after { content: ""; position: absolute; width: 10px; height: 10px; border: 1px solid var(--ink); pointer-events: none; }
+.corner::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.corner::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+.chip { font: 500 var(--step--1)/1 var(--font-mono); border: 1px solid var(--line-strong); background: transparent; padding: 7px 10px; cursor: pointer; white-space: nowrap; }
+.chip:hover { border-color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--invert-bg); color: var(--invert-ink); border-color: var(--invert-bg); }
+.tag { font: 400 .7rem/1 var(--font-mono); color: var(--dim); border: 1px solid var(--line); padding: 4px 6px; white-space: nowrap; }
+.btn { font: 600 var(--step--1)/1 var(--font-mono); letter-spacing: .06em; padding: 11px 14px; border: 1px solid var(--ink); background: var(--invert-bg); color: var(--invert-ink); cursor: pointer; text-decoration: none; display: inline-block; }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--line-strong); }
+.sub-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 12px; flex-wrap: wrap; }
+.sub-head span { font: 400 var(--step--1)/1.3 var(--font-mono); color: var(--dim); }
+.toast { position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); z-index: 60; background: var(--invert-bg); color: var(--invert-ink); font: 500 var(--step--1)/1 var(--font-mono); padding: 12px 16px; }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 52px 0; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 24px 56px; align-items: end; }
+@media (max-width: 820px) { .hero { grid-template-columns: 1fr; } }
+.hero h1 { font-size: var(--step-4); line-height: .95; font-weight: 700; text-transform: uppercase; margin-top: 14px; }
+.hero h1 .ghost { color: transparent; -webkit-text-stroke: 1px var(--ink); }
+.rules { display: grid; border: 1px solid var(--line); }
+.rule { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 14px; padding: 14px 16px; border-bottom: 1px solid var(--line); align-items: center; }
+.rule:last-child { border-bottom: 0; }
+.rule b { font: 700 var(--step-1)/1 var(--font-display); }
+.rule span { font-size: var(--step--1); color: var(--dim); }
+.ratio { display: flex; height: 26px; border: 1px solid var(--line-strong); }
+.ratio span { display: flex; align-items: center; justify-content: center; font: 600 .66rem/1 var(--font-mono); overflow: hidden; color: var(--ink); }
+.ratio span:nth-child(1) { flex: 80; background: var(--raise); }
+.ratio span:nth-child(2) { flex: 15; background: var(--line-strong); }
+.ratio span:nth-child(3) { flex: 5; background: var(--ink); color: var(--bg); }
+
+/* ---------- map: 6 steps x 8 layers ---------- */
+.map { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 960px) { .map { grid-template-columns: 1fr; } }
+.matrix-wrap { overflow-x: auto; }
+.matrix { width: 100%; min-width: 560px; border-collapse: collapse; }
+.matrix th, .matrix td { border: 1px solid var(--line); text-align: center; padding: 0; }
+.matrix thead th { vertical-align: bottom; }
+.matrix thead button { width: 100%; background: transparent; border: 0; padding: 12px 6px; cursor: pointer; display: grid; gap: 4px; justify-items: center; }
+.matrix thead button small { font: 500 .66rem/1 var(--font-mono); color: var(--dim); }
+.matrix thead button b { font: 600 .82rem/1.15 var(--font-display); letter-spacing: .02em; }
+.matrix thead button:hover { background: var(--raise); }
+.matrix thead th.on button { background: var(--invert-bg); color: var(--invert-ink); }
+.matrix thead th.on button small { color: var(--invert-ink); }
+.matrix tbody th { text-align: left; padding: 9px 12px; font-weight: 400; white-space: nowrap; }
+.matrix tbody th a { text-decoration: none; display: flex; gap: 10px; align-items: baseline; }
+.matrix tbody th small { font: 600 .7rem/1 var(--font-mono); color: var(--dim); width: 22px; }
+.matrix tbody th b { font: 600 .82rem/1 var(--font-display); letter-spacing: .03em; }
+.matrix tbody th span { font-size: .72rem; color: var(--dim); }
+.matrix tbody th a:hover b { text-decoration: underline; }
+.matrix td { width: 13%; }
+.matrix td i { display: inline-block; width: 9px; height: 9px; border: 1px solid var(--line); transform: rotate(45deg); }
+.matrix td.hit i { background: var(--dim); border-color: var(--dim); }
+.matrix td.col { background: var(--raise); }
+.matrix td.col.hit i { background: var(--ink); border-color: var(--ink); width: 13px; height: 13px; }
+.matrix tr.lit th { background: var(--raise); }
+.stepcard { display: grid; grid-template-rows: auto auto 1fr auto; }
+.stepcard .top { padding: 18px 18px 6px; display: grid; gap: 6px; }
+.stepcard .top small { font: 500 .7rem/1 var(--font-mono); color: var(--dim); letter-spacing: .1em; }
+.stepcard .top h3 { font-size: var(--step-2); }
+.stepcard .top p { margin: 0; color: var(--dim); }
+.glyph { margin: 10px 18px; border: 1px solid var(--line); background: var(--bg); height: 170px; position: relative; overflow: hidden; display: grid; place-items: center; }
+.tools-strip { display: flex; gap: 8px; padding: 8px 18px; flex-wrap: wrap; align-content: start; }
+.tool-mini { display: grid; gap: 4px; width: 92px; text-decoration: none; }
+.tool-mini img { width: 92px; aspect-ratio: 40/21; object-fit: cover; border: 1px solid var(--line-strong); }
+.tool-mini span { font: 500 .66rem/1.2 var(--font-mono); color: var(--dim); }
+.tool-mini:hover img { border-color: var(--ink); }
+.stepcard .go { padding: 12px 18px 18px; display: flex; gap: 8px; flex-wrap: wrap; }
+.g-ref { position: relative; width: 240px; height: 140px; }
+.g-ref img { position: absolute; width: 150px; aspect-ratio: 16/10; object-fit: cover; border: 1px solid var(--line-strong); box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+.g-ref img:nth-child(1) { left: 0; top: 18px; transform: rotate(-6deg); }
+.g-ref img:nth-child(2) { left: 45px; top: 4px; z-index: 2; }
+.g-ref img:nth-child(3) { left: 90px; top: 22px; transform: rotate(5deg); }
+.g-dna { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 280px; }
+.g-dna span { font: 600 .6rem/1 var(--font-mono); border: 1px solid var(--line-strong); padding: 9px 2px; text-align: center; animation: scanCell 2.4s steps(1) infinite; }
+@keyframes scanCell { 0%, 100% { background: transparent; color: var(--ink); } 12% { background: var(--ink); color: var(--bg); } 24% { background: transparent; color: var(--ink); } }
+.g-token { display: grid; gap: 10px; width: 260px; }
+.g-token .sw { display: flex; height: 26px; border: 1px solid var(--line-strong); }
+.g-token .sw i { flex: 1; }
+.g-token .ty { display: flex; align-items: baseline; gap: 10px; font-family: var(--font-display); }
+.g-token .sp { display: flex; align-items: end; gap: 4px; height: 26px; }
+.g-token .sp i { background: var(--dim); width: 10px; }
+.g-comp { display: grid; grid-template-columns: repeat(3, 72px); gap: 8px; }
+.g-comp div { height: 46px; border: 1px solid var(--line-strong); display: grid; place-items: center; font: 500 .6rem/1 var(--font-mono); color: var(--dim); }
+.g-comp .b span { background: var(--ink); color: var(--bg); padding: 5px 8px; }
+.g-comp .t span { width: 28px; height: 14px; border: 1px solid var(--ink); border-radius: 8px; position: relative; }
+.g-comp .t span::after { content: ""; position: absolute; width: 10px; height: 10px; background: var(--ink); border-radius: 50%; top: 1px; left: 15px; }
+.g-ai { width: 280px; font: 400 .72rem/1.6 var(--font-mono); border: 1px solid var(--line-strong); padding: 10px 12px; background: var(--surface); }
+.g-ai em { font-style: normal; color: var(--dim); }
+.g-ai i { display: inline-block; width: 7px; height: 13px; background: var(--ink); vertical-align: -2px; animation: blink 1s steps(2) infinite; }
+.g-qa { display: flex; gap: 14px; align-items: end; }
+.g-qa .ph { width: 44px; height: 80px; border: 1.5px solid var(--ink); border-radius: 8px; }
+.g-qa .dt { width: 130px; height: 82px; border: 1.5px solid var(--ink); border-radius: 4px; }
+.g-qa .cr { font: 700 1.4rem/1 var(--font-mono); display: grid; gap: 6px; }
+.g-qa .cr small { font: 600 .62rem/1 var(--font-mono); color: var(--ok); border: 1px solid currentColor; padding: 3px 5px; justify-self: start; }
+
+/* ---------- gallery ---------- */
+.toolbar { display: grid; gap: 12px; margin-bottom: 8px; }
+.search { display: flex; align-items: center; border: 1px solid var(--line-strong); background: var(--surface); }
+.search span { font: 500 var(--step--1)/1 var(--font-mono); padding: 0 12px; color: var(--dim); }
+.search input { flex: 1; min-width: 0; background: transparent; border: 0; padding: 13px 4px; outline: none; font-family: var(--font-mono); }
+.search:focus-within { border-color: var(--ink); }
+.search kbd { font: 400 .7rem/1 var(--font-mono); border: 1px solid var(--line); padding: 4px 6px; margin-right: 10px; color: var(--dim); }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.count { font: 500 var(--step--1)/1 var(--font-mono); color: var(--dim); margin-left: auto; font-variant-numeric: tabular-nums; }
+.layer-group { padding-top: 28px; scroll-margin-top: 60px; }
+.layer-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: baseline; border-bottom: 1px solid var(--line-strong); padding-bottom: 10px; margin-bottom: 18px; }
+@media (max-width: 640px) { .layer-head { grid-template-columns: auto minmax(0, 1fr); } .layer-head .st { grid-column: 1 / -1; justify-content: start; } }
+.layer-head .ln { font: 700 var(--step-2)/1 var(--font-mono); }
+.layer-head h3 span { font: 400 var(--step--1)/1.4 var(--font-body); color: var(--dim); margin-left: 10px; }
+.layer-head .st { display: flex; gap: 4px; flex-wrap: wrap; justify-content: end; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px 18px; }
+.frame { display: grid; align-content: start; text-decoration: none; color: inherit; }
+.canvas { border: 1px solid var(--line-strong); padding: 8px; background: var(--surface); position: relative; transition: transform .2s ease, box-shadow .2s ease; }
+.canvas img { width: 100%; aspect-ratio: 40 / 21; max-width: 100%; object-fit: cover; background: var(--raise); }
+.canvas .stamp { position: absolute; top: 14px; right: 14px; font: 600 .62rem/1 var(--font-mono); letter-spacing: .1em; background: var(--invert-bg); color: var(--invert-ink); padding: 4px 6px; }
+.frame:hover .canvas, .frame:focus-visible .canvas { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--line-strong); }
+.plaque { padding: 12px 2px 0; display: grid; gap: 5px; }
+.plaque .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.plaque h4 { font-size: var(--step-1); font-weight: 600; }
+.plaque .row span { font: 400 .7rem/1 var(--font-mono); color: var(--dim); }
+.plaque p { margin: 0; font-size: var(--step--1); color: var(--dim); }
+.plaque p b { color: var(--ink); font-weight: 500; }
+.urlrow { display: flex; gap: 6px; align-items: center; margin-top: 8px; }
+.urlrow code { flex: 1; min-width: 0; font: 400 .68rem/1.3 var(--font-mono); color: var(--dim); border: 1px solid var(--line); padding: 6px 7px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; user-select: all; }
+.urlrow button { font: 500 .68rem/1 var(--font-mono); border: 1px solid var(--line-strong); background: transparent; padding: 6px 8px; cursor: pointer; white-space: nowrap; }
+.urlrow button:hover { border-color: var(--ink); }
+.empty { border: 1px dashed var(--line-strong); padding: 40px 20px; text-align: center; font-family: var(--font-mono); color: var(--dim); margin-top: 24px; }
+
+/* ---------- recipes ---------- */
+.recipe-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 820px) { .shots { grid-template-columns: 1fr; } }
+.shot { display: grid; gap: 10px; align-content: start; text-decoration: none; }
+.shot .pic { border: 1px solid var(--line-strong); padding: 6px; background: var(--surface); transition: transform .2s, box-shadow .2s; }
+.shot .pic img { width: 100%; aspect-ratio: 16/10; object-fit: cover; max-width: 100%; }
+.shot:hover .pic { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--line-strong); }
+.shot .cap { display: grid; gap: 4px; }
+.shot .cap small { font: 500 .68rem/1.3 var(--font-mono); color: var(--dim); letter-spacing: .06em; }
+.shot .cap b { font: 600 var(--step-1)/1.3 var(--font-display); }
+.shot .cap span { font-size: var(--step--1); color: var(--dim); }
+.combo { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; margin-top: 20px; }
+@media (max-width: 900px) { .combo { grid-template-columns: 1fr; } }
+.combo-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); background: var(--surface); }
+@media (max-width: 640px) { .combo-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.slot { padding: 12px; border-right: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-content: start; }
+.slot:last-child { border-right: 0; }
+.slot > small { width: 100%; font: 500 .66rem/1 var(--font-mono); color: var(--dim); letter-spacing: .1em; text-transform: uppercase; }
+.slot .note { font: 500 .72rem/1.3 var(--font-mono); border: 1px dashed var(--line-strong); padding: 6px 7px; }
+.combo-side { border: 1px solid var(--line); background: var(--surface); padding: 14px; display: grid; gap: 10px; align-content: start; }
+.combo-side ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: var(--step--1); }
+.combo-side li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; }
+.combo-side li b { font: 600 .72rem/1.6 var(--font-mono); }
+.combo-side li span { color: var(--dim); }
+
+/* ---------- DNA lab ---------- */
+.dna-wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 16px; }
+@media (max-width: 860px) { .dna-wrap { grid-template-columns: 1fr; } }
+.dna-btns { display: grid; gap: 6px; align-content: start; }
+@media (max-width: 860px) { .dna-btns { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .dna-btns { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.dna-btns button { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 12px; border: 1px solid var(--line-strong); background: var(--surface); cursor: pointer; font: 600 var(--step--1)/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 3px 0 var(--line-strong); transition: transform .08s, box-shadow .08s; }
+.dna-btns button small { font: 400 .64rem/1 var(--font-mono); color: var(--dim); }
+.dna-btns button[aria-pressed="true"] { background: var(--invert-bg); color: var(--invert-ink); border-color: var(--invert-bg); transform: translateY(3px); box-shadow: none; }
+.dna-btns button[aria-pressed="true"] small { color: var(--invert-ink); }
+.dna-stage { border: 1px solid var(--line); min-width: 0; display: grid; }
+.dna-note { padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--surface); display: flex; gap: 6px 16px; align-items: baseline; flex-wrap: wrap; }
+.dna-note b { font: 600 var(--step-0)/1.2 var(--font-display); letter-spacing: .04em; }
+.dna-note span { font-size: var(--step--1); color: var(--dim); }
+.dna-scroll { overflow-x: auto; background: #e9e9e6; }
+.site-host { position: relative; min-width: 640px; }
+.site { background: #f7f7f4; color: #141414; font-family: "Inter", var(--font-body); }
+.site .d-nav { display: flex; align-items: center; gap: 22px; padding: 14px 32px; border-bottom: 1px solid #e3e3df; font-size: 13px; }
+.site .d-logo { font: 700 15px/1 var(--font-display); letter-spacing: .12em; margin-right: auto; }
+.site .d-link { color: #555; }
+.site .d-navbtn { background: #141414; color: #fff; padding: 8px 14px; border-radius: 8px; font-weight: 700; transition: transform .15s ease-out; }
+.site .d-container { max-width: 760px; margin: 0 auto; padding: 44px 32px 40px; }
+.site .d-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; }
+.site .d-eyebrow { font: 600 11px/1 var(--font-mono); letter-spacing: .12em; color: #3b5bff; margin: 0 0 12px; }
+.site .d-h1 { font: 800 38px/1.08 "Inter", "Noto Sans TC", sans-serif; letter-spacing: -.02em; margin: 0; }
+.site .d-p { font-size: 15px; line-height: 1.6; color: #5a5a5a; margin: 14px 0 20px; }
+.site .d-ctas { display: flex; gap: 10px; }
+.site .d-cta { background: #3b5bff; color: #fff; padding: 11px 18px; border-radius: 8px; font-size: 14px; font-weight: 700; transition: transform .2s ease, box-shadow .2s ease; }
+.site .d-cta2 { border: 1px solid #d6d6d2; padding: 10px 16px; border-radius: 8px; font-size: 14px; background: #fff; }
+.site .d-img { aspect-ratio: 1; max-width: 100%; border-radius: 18px; background: radial-gradient(circle at 34% 30%, #fff 0 6%, #c7cdfb 26%, #6378ff 62%, #1e2a7a 100%); box-shadow: 0 18px 40px rgba(30, 42, 122, .25); transition: transform .4s cubic-bezier(.2, .8, .2, 1); }
+.site .d-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+.site .d-card { background: #fff; border: 1px solid #e3e3df; border-radius: 14px; padding: 20px; transition: transform .25s ease, box-shadow .25s ease; }
+.site .d-icon { width: 30px; height: 30px; border-radius: 8px; background: #eef0ff; border: 1px solid #c9d0ff; margin-bottom: 14px; }
+.site .d-card h5 { font: 700 15px/1.3 "Inter", "Noto Sans TC", sans-serif; margin: 0 0 6px; }
+.site .d-card p { font-size: 13px; line-height: 1.55; color: #666; margin: 0; }
+.site .d-foot { border-top: 1px solid #e3e3df; padding: 16px 32px; font-size: 12px; color: #888; display: flex; justify-content: space-between; }
+.site-host.play .d-card:nth-child(1) { transform: translateY(-6px); box-shadow: 0 14px 26px rgba(0,0,0,.1); }
+.site-host.play .d-cta { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(59, 91, 255, .35); }
+.site-host.play .d-img { transform: rotate(-4deg) scale(1.03); }
+.ov { position: absolute; inset: 0; pointer-events: none; }
+.ov .bx { position: absolute; border: 1.5px solid #ff2d55; }
+.ov .bx.dash { border-style: dashed; }
+.ov .lb { position: absolute; font: 600 10.5px/1 var(--font-mono); background: #ff2d55; color: #fff; padding: 4px 6px; white-space: nowrap; letter-spacing: .02em; display: flex; gap: 6px; align-items: center; }
+.ov .lb i { width: 10px; height: 10px; border: 1px solid #fff; display: inline-block; }
+.ov .col { position: absolute; background: rgba(255, 45, 85, .08); border-inline: 1px solid rgba(255, 45, 85, .4); }
+.ov .pad { position: absolute; background: repeating-linear-gradient(45deg, rgba(40, 150, 80, .4) 0 2px, rgba(40, 150, 80, .12) 2px 6px); }
+.ov .gap { position: absolute; border-left: 1.5px solid #ff2d55; }
+.ov .gap::before, .ov .gap::after { content: ""; position: absolute; left: -6px; width: 11px; border-top: 1.5px solid #ff2d55; }
+.ov .gap::before { top: 0; } .ov .gap::after { bottom: 0; }
+
+/* ---------- color lab ---------- */
+.lab { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .lab { grid-template-columns: 1fr; } }
+.wheel-box { padding: 16px; display: grid; gap: 14px; justify-items: center; align-content: start; }
+.wheel-box canvas { width: 280px; height: 280px; max-width: 100%; touch-action: none; cursor: crosshair; }
+.harm { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.slider { display: grid; grid-template-columns: 70px minmax(0, 1fr) 46px; gap: 10px; align-items: center; width: 100%; font: 500 .72rem/1 var(--font-mono); color: var(--dim); }
+.slider output { color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+input[type="range"] { accent-color: var(--ink); width: 100%; }
+.harm-out { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.harm-desc { padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 16px; align-items: center; }
+.harm-desc h3 { font-size: var(--step-2); }
+.harm-desc p { margin: 0; color: var(--dim); grid-column: 1 / -1; font-size: var(--step--1); }
+.swatches { display: flex; min-height: 140px; border: 1px solid var(--line); }
+.swatches button { flex: 1; border: 0; cursor: pointer; display: flex; flex-direction: column; justify-content: end; align-items: start; padding: 10px; font: 500 .7rem/1.4 var(--font-mono); text-align: left; min-width: 0; }
+.swatches button span { opacity: .85; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.roles-demo { display: grid; grid-template-columns: minmax(0, 1fr) 230px; border: 1px solid var(--line); }
+@media (max-width: 640px) { .roles-demo { grid-template-columns: 1fr; } }
+.rd-ui { background: var(--c-bg); color: var(--c-text); padding: 14px; display: grid; gap: 10px; font-family: "Inter", var(--font-body); }
+.rd-ui .r-nav { background: var(--c-surface); border: 1px solid var(--c-border); padding: 8px 10px; display: flex; gap: 10px; align-items: center; font-size: .74rem; }
+.rd-ui .r-nav b { margin-right: auto; }
+.rd-ui .r-nav span { color: var(--c-muted); }
+.rd-ui .r-hero { display: grid; gap: 6px; padding: 6px 2px; }
+.rd-ui .r-hero h4 { font: 800 1.3rem/1.1 "Inter", "Noto Sans TC", sans-serif; justify-self: start; }
+.rd-ui .r-hero p { margin: 0; color: var(--c-muted); font-size: .8rem; justify-self: start; }
+.rd-ui .r-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.rd-ui .r-btn { background: var(--c-primary); color: var(--c-on-primary); padding: 7px 12px; font-size: .76rem; font-weight: 700; border-radius: 6px; }
+.rd-ui .r-btn2 { background: var(--c-secondary); color: var(--c-on-secondary); padding: 7px 12px; font-size: .76rem; font-weight: 700; border-radius: 6px; }
+.rd-ui .r-badge { justify-self: start; border: 1px solid var(--c-accent); color: var(--c-accent); font: 700 .66rem/1 var(--font-mono); padding: 4px 6px; }
+.rd-ui .r-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rd-ui .r-card { background: var(--c-surface); border: 1px solid var(--c-border); padding: 10px; font-size: .74rem; display: grid; gap: 4px; border-radius: 6px; }
+.rd-ui .r-card span { color: var(--c-muted); }
+.rd-ui .r-sem { display: flex; gap: 6px; flex-wrap: wrap; }
+.rd-ui .r-sem span { font: 600 .66rem/1 var(--font-mono); padding: 5px 7px; border-left: 3px solid currentColor; background: var(--c-surface); }
+.rd-ui [data-role] { position: relative; }
+.rd-ui.show [data-role]::after { content: attr(data-role); position: absolute; right: 2px; top: 2px; font: 600 9px/1 var(--font-mono); background: #0b0b0c; color: #fff; padding: 2px 4px; pointer-events: none; letter-spacing: .02em; }
+.rd-ui.show .r-nav[data-role]::after, .rd-ui.show .r-btn[data-role]::after, .rd-ui.show .r-btn2[data-role]::after, .rd-ui.show .r-badge[data-role]::after, .rd-ui.show h4[data-role]::after, .rd-ui.show p[data-role]::after { position: static; display: inline-block; margin-left: 6px; vertical-align: middle; }
+.rd-side { padding: 12px 14px; display: grid; gap: 8px; align-content: start; font-size: var(--step--1); border-left: 1px solid var(--line); background: var(--surface); }
+@media (max-width: 640px) { .rd-side { border-left: 0; border-top: 1px solid var(--line); } }
+.rd-side .ck { display: flex; justify-content: space-between; gap: 8px; font-family: var(--font-mono); font-size: .72rem; align-items: center; }
+.pass, .fail { font: 600 .64rem/1 var(--font-mono); padding: 3px 5px; border: 1px solid currentColor; }
+.pass { color: var(--ok); }
+.fail { color: var(--bad); }
+.lab2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+@media (max-width: 900px) { .lab2 { grid-template-columns: 1fr; } }
+.lab2 .panel { padding: 16px; display: grid; gap: 12px; align-content: start; }
+.lab2 .panel p { margin: 0; color: var(--dim); font-size: var(--step--1); }
+.lgap { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.lgap > div { display: grid; gap: 6px; }
+.lgap .m { background: var(--g-bg); padding: 14px; display: grid; gap: 8px; border: 1px solid var(--line); }
+.lgap .m.gray { filter: grayscale(1); }
+.lgap .m .c { background: var(--g-surface); border: 1px solid var(--g-border); padding: 10px; display: grid; gap: 4px; }
+.lgap .m b { color: var(--g-text); font: 700 .9rem/1.2 "Inter", "Noto Sans TC", sans-serif; }
+.lgap .m span { color: var(--g-muted); font-size: .74rem; }
+.lgap small { font: 500 .66rem/1 var(--font-mono); color: var(--dim); }
+.cc-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cc-inputs label { display: grid; gap: 6px; font: 500 .68rem/1 var(--font-mono); color: var(--dim); letter-spacing: .08em; }
+.cc-inputs .pick { display: flex; border: 1px solid var(--line-strong); }
+.cc-inputs input[type="color"] { width: 44px; height: 36px; border: 0; padding: 0; background: none; cursor: pointer; }
+.cc-inputs input[type="text"] { flex: 1; min-width: 0; background: var(--bg); border: 0; border-left: 1px solid var(--line-strong); padding: 0 10px; font-family: var(--font-mono); font-size: .8rem; }
+.cc-sample { padding: 16px; display: grid; gap: 6px; border: 1px solid var(--line); }
+.cc-sample .big { font: 700 1.5rem/1.2 "Inter", "Noto Sans TC", sans-serif; }
+.cc-sample .sm { font-size: .9rem; }
+.cc-res { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.cc-res b { font: 700 1.6rem/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ---------- builder ---------- */
+.bstep { border: 1px solid var(--line); background: var(--surface); margin-bottom: 14px; }
+.bstep > header { display: flex; gap: 12px; align-items: baseline; padding: 12px 16px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.bstep > header b { font: 700 var(--step--1)/1 var(--font-mono); background: var(--invert-bg); color: var(--invert-ink); padding: 4px 6px; }
+.bstep > header h3 { font-size: var(--step-0); letter-spacing: .04em; }
+.bstep > header span { font-size: var(--step--1); color: var(--dim); margin-left: auto; }
+.bstep .body { padding: 14px 16px; }
+.refpick { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; max-height: 360px; overflow-y: auto; padding-right: 4px; }
+.refpick button { border: 1px solid var(--line); background: var(--bg); padding: 4px; cursor: pointer; display: grid; gap: 4px; text-align: left; position: relative; }
+.refpick button img { width: 100%; aspect-ratio: 16/10; object-fit: cover; max-width: 100%; }
+.refpick button span { font: 500 .66rem/1.2 var(--font-mono); color: var(--dim); padding: 0 2px 2px; }
+.refpick button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+.refpick button[aria-pressed="true"]::after { content: attr(data-n); position: absolute; top: 8px; left: 8px; font: 700 .7rem/1 var(--font-mono); background: var(--invert-bg); color: var(--invert-ink); padding: 4px 6px; }
+.chosen { display: grid; gap: 8px; margin-top: 12px; }
+.chosen-item { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 12px; align-items: center; border: 1px solid var(--line); padding: 6px; background: var(--bg); }
+.chosen-item img { width: 96px; aspect-ratio: 16/10; object-fit: cover; background: var(--raise); }
+.chosen-item .dims { display: flex; gap: 4px; flex-wrap: wrap; }
+.chosen-item .dims button { font: 500 .66rem/1 var(--font-mono); border: 1px solid var(--line-strong); background: transparent; padding: 5px 6px; cursor: pointer; }
+.chosen-item .dims button[aria-pressed="true"] { background: var(--invert-bg); color: var(--invert-ink); border-color: var(--invert-bg); }
+.chosen-item .nm { font: 600 .74rem/1.2 var(--font-mono); margin-bottom: 6px; overflow-wrap: anywhere; }
+.chosen-item .x { background: none; border: 1px solid var(--line); cursor: pointer; padding: 6px 8px; font-family: var(--font-mono); }
+.upload { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; padding: 12px; border: 1px dashed var(--line-strong); position: relative; }
+.upload.drag { border-color: var(--ink); background: var(--raise); }
+.upload label { cursor: pointer; }
+.upload input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.upload span { font-size: var(--step--1); color: var(--dim); flex: 1 1 260px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.vcard { border: 1px solid var(--line); background: var(--bg); padding: 8px; cursor: pointer; display: grid; gap: 6px; text-align: left; align-content: start; }
+.vcard:hover { border-color: var(--line-strong); }
+.vcard[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+.vcard .vis { height: 88px; border: 1px solid var(--line); position: relative; overflow: hidden; background: var(--surface); }
+.vcard b { font: 600 .8rem/1.2 var(--font-display); letter-spacing: .02em; }
+.vcard small { font: 400 .66rem/1.3 var(--font-mono); color: var(--dim); }
+.vcard .vis.cover img { width: 100%; height: 100%; object-fit: cover; }
+.wf { position: absolute; inset: 8px; display: grid; gap: 4px; }
+.wf i { background: var(--line-strong); display: block; }
+.wf i.k { background: var(--ink); }
+.wf-center { grid-template-rows: 6px 10px 6px 8px 1fr; justify-items: center; }
+.wf-center > i:nth-child(1) { width: 40%; } .wf-center > i:nth-child(2) { width: 70%; } .wf-center > i:nth-child(3) { width: 55%; } .wf-center > i:nth-child(4) { width: 22%; }
+.wf-center .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; }
+.wf-split { grid-template-columns: 1fr 1fr; align-items: stretch; }
+.wf-split .l { display: grid; gap: 4px; align-content: center; } .wf-split .l i { height: 7px; } .wf-split .l i:nth-child(1) { height: 12px; } .wf-split .l i:nth-child(3) { width: 40%; }
+.wf-bento { grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.wf-bento i:nth-child(1) { grid-row: span 2; } .wf-bento i:nth-child(4) { grid-column: span 2; }
+.wf-edit { grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 18px 1fr; }
+.wf-edit i:nth-child(1) { grid-column: 1 / -1; }
+.wf-story { grid-template-rows: repeat(3, 1fr); }
+.wf-story .r { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; } .wf-story .r:nth-child(2) i:first-child { order: 2; }
+.wf-dash { grid-template-columns: 18px 1fr; } .wf-dash .m { display: grid; grid-template-rows: 14px 1fr; gap: 4px; } .wf-dash .m .t { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.ts { position: absolute; inset: 0; display: grid; place-items: center; font-size: 30px; color: var(--ink); }
+.fx-beam::before { content: ""; position: absolute; left: 22%; right: 22%; top: 50%; height: 2px; background: linear-gradient(90deg, transparent, var(--ink), transparent) no-repeat; background-size: 50% 100%; animation: beam 1.8s linear infinite; }
+.fx-beam::after { content: ""; position: absolute; top: calc(50% - 9px); left: 12%; right: 12%; height: 18px; border-inline: 18px solid var(--line-strong); }
+@keyframes beam { from { background-position: -100% 0; } to { background-position: 200% 0; } }
+@property --x { syntax: "<percentage>"; inherits: false; initial-value: 30%; }
+.fx-spot { background: radial-gradient(circle at var(--x) 40%, var(--line-strong), transparent 45%) var(--surface) !important; animation: spot 3s ease-in-out infinite alternate; }
+@keyframes spot { from { --x: 20%; } to { --x: 80%; } }
+.fx-marq span { position: absolute; top: 34px; left: 0; white-space: nowrap; font: 700 .9rem/1 var(--font-display); letter-spacing: .1em; animation: marq 6s linear infinite; }
+@keyframes marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.fx-tilt span { position: absolute; inset: 16px 34px; border: 1px solid var(--ink); background: var(--raise); animation: tilt 3s ease-in-out infinite; }
+@keyframes tilt { 0%, 100% { transform: perspective(300px) rotateY(-18deg) rotateX(8deg); } 50% { transform: perspective(300px) rotateY(18deg) rotateX(-8deg); } }
+.fx-part i { position: absolute; width: 3px; height: 3px; background: var(--ink); border-radius: 50%; animation: drift 4s linear infinite; }
+@keyframes drift { from { transform: translateY(20px); opacity: 0; } 30% { opacity: 1; } to { transform: translateY(-60px); opacity: 0; } }
+.fx-text span { position: absolute; inset: 0; display: grid; place-items: center; font: 700 1.4rem/1 var(--font-display); background: linear-gradient(90deg, var(--line-strong) 30%, var(--ink) 50%, var(--line-strong) 70%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 2s linear infinite; }
+@keyframes shine { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.fx-cube span { position: absolute; left: calc(50% - 22px); top: calc(50% - 22px); width: 44px; height: 44px; transform-style: preserve-3d; animation: spin 6s linear infinite; }
+.fx-cube span i { position: absolute; inset: 0; border: 1px solid var(--ink); background: color-mix(in srgb, var(--raise) 70%, transparent); }
+.fx-cube span i:nth-child(1) { transform: translateZ(22px); } .fx-cube span i:nth-child(2) { transform: rotateY(90deg) translateZ(22px); } .fx-cube span i:nth-child(3) { transform: rotateY(180deg) translateZ(22px); } .fx-cube span i:nth-child(4) { transform: rotateY(-90deg) translateZ(22px); } .fx-cube span i:nth-child(5) { transform: rotateX(90deg) translateZ(22px); } .fx-cube span i:nth-child(6) { transform: rotateX(-90deg) translateZ(22px); }
+@keyframes spin { from { transform: rotateX(-20deg) rotateY(0); } to { transform: rotateX(-20deg) rotateY(360deg); } }
+.fx-scroll span { position: absolute; left: 20px; right: 20px; height: 14px; background: var(--line-strong); animation: scrollup 3s linear infinite; }
+.fx-scroll span:nth-of-type(2) { animation-delay: -1s; } .fx-scroll span:nth-of-type(3) { animation-delay: -2s; }
+.fx-scroll b { position: absolute; left: 10px; right: 10px; top: 34px; height: 20px; border: 1px solid var(--ink); z-index: 2; }
+@keyframes scrollup { from { top: 100px; } to { top: -20px; } }
+.fx-none span { position: absolute; inset: 0; display: grid; place-items: center; font: 500 .7rem/1 var(--font-mono); color: var(--dim); }
+pre.code { margin: 0; padding: 16px; overflow-x: auto; font: 400 .78rem/1.7 var(--font-mono); background: var(--bg); white-space: pre-wrap; max-height: 560px; border-top: 1px solid var(--line); }
+.field { display: grid; gap: 6px; }
+.field label { font: 500 .68rem/1 var(--font-mono); color: var(--dim); letter-spacing: .1em; }
+.field input { background: var(--bg); border: 1px solid var(--line-strong); padding: 9px 10px; font-size: var(--step--1); width: 100%; min-width: 0; }
+.field input:focus { border-color: var(--ink); outline: none; }
+
+footer { padding-block: 48px; margin-top: 56px; border-top: 1px solid var(--line); font: 400 var(--step--1)/1.6 var(--font-mono); color: var(--dim); }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+</style>
+<!--SKELETON-->
+</head>
+<body>
+<!--/SKELETON-->
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top"><i></i>REF.SYS / Atlas</a>
+    <nav class="nav" aria-label="區塊">
+      <a href="#map">地圖</a>
+      <a href="#gallery">資源 L1–L8</a>
+      <a href="#recipes">風格配方</a>
+      <a href="#dna">DNA 拆解</a>
+      <a href="#color">色彩實驗</a>
+      <a href="#builder">Prompt 組裝</a>
+    </nav>
+    <button class="themebtn" id="themeBtn" type="button" aria-label="切換深淺色">◐ THEME</button>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <div class="eyebrow">Visual Reference System · 工具書</div>
+      <h1>Design <span class="ghost">Reference</span><br>Atlas</h1>
+    </div>
+    <div class="rules">
+      <div class="rule"><b>組裝</b><span>AI 負責組裝與變形，Taste 由你決定</span></div>
+      <div class="rule"><b>80/15/5</b><div class="ratio" aria-label="80% 資訊架構, 15% 品牌視覺, 5% 記憶點"><span>80 架構</span><span>15</span><span>5</span></div></div>
+      <div class="rule"><b>先拆 DNA</b><span>不要只丟 Screenshot 給 AI</span></div>
+    </div>
+  </div>
+
+  <section class="zone wrap" id="map">
+    <div class="zone-head">
+      <div><div class="eyebrow">Map · 6 Steps × 8 Layers</div><h2>六步驟用到哪幾層</h2></div>
+      <p class="lede">橫向是工作順序，直向是資源分層。點一個步驟，看它用到哪幾層、該打開哪些工具，再跳到下面對應的實作區。</p>
+    </div>
+    <div class="map">
+      <div class="panel matrix-wrap"><table class="matrix" id="matrix"></table></div>
+      <div class="panel corner stepcard" id="stepcard"></div>
+    </div>
+  </section>
+
+  <section class="zone wrap" id="gallery">
+    <div class="zone-head">
+      <div><div class="eyebrow">Resources <span class="stepref">STEP 01 · 04</span></div><h2>資源畫廊 L1–L8</h2></div>
+      <p class="lede">封面圖取自各網站自己的分享封面（og:image），沒有封面的用首頁截圖。點圖直接開網站。</p>
+    </div>
+    <div class="toolbar">
+      <div class="search"><span>&gt;_</span><input id="q" type="search" placeholder="搜尋：landing、3D、配色、MCP、Dashboard…" autocomplete="off" aria-label="搜尋資源"><kbd>/</kbd></div>
+      <div class="filters" id="layerFilters"></div>
+      <div class="filters"><button class="chip" id="stackOnly" type="button" aria-pressed="false">只看實戰 Stack</button><span class="count" id="count"></span></div>
+    </div>
+    <div id="galleryGroups"></div>
+  </section>
+
+  <section class="zone wrap" id="recipes">
+    <div class="zone-head">
+      <div><div class="eyebrow">Style Recipes <span class="stepref">STEP 01</span></div><h2>風格配方</h2></div>
+      <p class="lede">每種風格挑三張本專案的範本截圖並排，下面寫這張該看什麼。截圖可以點開原始範本，也可以整組丟進 Prompt 組裝器當參考圖。</p>
+    </div>
+    <div class="recipe-tabs" id="recipeTabs"></div>
+    <div class="shots" id="shots"></div>
+    <div class="combo" id="combo"></div>
+  </section>
+
+  <section class="zone wrap" id="dna">
+    <div class="zone-head">
+      <div><div class="eyebrow">Design DNA <span class="stepref">STEP 02</span></div><h2>DNA 拆解台</h2></div>
+      <p class="lede">按下維度，右邊的示範網站會標出它的實際位置與數值。標註是即時量測頁面元素算出來的，跟用 CSS Peeper 拆別人網站時看到的是同一類資訊。</p>
+    </div>
+    <div class="dna-wrap">
+      <div class="dna-btns" id="dnaBtns"></div>
+      <div class="dna-stage">
+        <div class="dna-note" id="dnaNote"></div>
+        <div class="dna-scroll">
+          <div class="site-host" id="siteHost">
+            <div class="site" id="site">
+              <div class="d-nav" data-comp="Navbar" data-dens>
+                <span class="d-logo" data-type="Logo">LUMEN</span>
+                <span class="d-link" data-type="Nav">功能</span><span class="d-link">案例</span><span class="d-link">價格</span>
+                <span class="d-navbtn" data-shape data-color="Nav CTA" data-comp="Nav CTA" data-motion>試用</span>
+              </div>
+              <div class="d-container" data-layout data-dens data-color="Background">
+                <div class="d-hero" data-comp="Hero / Split" data-hero>
+                  <div>
+                    <p class="d-eyebrow" data-type="Eyebrow" data-color="Accent">MONITORING · v3</p>
+                    <h1 class="d-h1" data-type="H1" data-color="Text">讓每台機器都看得見</h1>
+                    <p class="d-p" data-type="Body" data-color="Text Muted">即時監控、異常預警與報表，一個儀表板完成。部署只要十分鐘。</p>
+                    <div class="d-ctas"><span class="d-cta" data-shape data-color="Primary" data-comp="CTA" data-motion>免費開始</span><span class="d-cta2" data-shape data-comp="Secondary">看示範</span></div>
+                  </div>
+                  <div class="d-img" data-img="3D render · 抽象球體 · 單一品牌藍" data-shape data-motion></div>
+                </div>
+                <div class="d-features" data-comp="Feature Cards ×3" data-features>
+                  <div class="d-card" data-shape data-dens data-color="Surface" data-motion><div class="d-icon" data-img="Icon · 線性 · 單色"></div><h5 data-type="H5">即時串流</h5><p data-type="Small">每秒 10 萬筆事件，延遲低於 200ms。</p></div>
+                  <div class="d-card"><div class="d-icon"></div><h5>異常預警</h5><p>自動學習基準線，超出範圍就通知。</p></div>
+                  <div class="d-card"><div class="d-icon"></div><h5>一鍵報表</h5><p>週報、月報自動寄給主管。</p></div>
+                </div>
+              </div>
+              <div class="d-foot" data-comp="Footer"><span>© Lumen</span><span>隱私 · 條款</span></div>
+            </div>
+            <div class="ov" id="ov"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="zone wrap" id="color">
+    <div class="zone-head">
+      <div><div class="eyebrow">Color Lab <span class="stepref">STEP 03 · 06</span></div><h2>色彩實驗室</h2></div>
+      <p class="lede">在色相環上拖曳選主色，切換色彩和諧，看顏色怎麼分配到 UI 角色上。下方兩個實驗：明度比色相重要、對比檢查。</p>
+    </div>
+    <div class="lab">
+      <div class="panel wheel-box">
+        <canvas id="wheel" width="560" height="560" aria-label="色相環，拖曳選擇主色相"></canvas>
+        <div class="harm" id="harm"></div>
+        <div class="slider"><label for="hue">Hue</label><input type="range" id="hue" min="0" max="359" value="262"><output id="hueO"></output></div>
+        <div class="slider"><label for="lig">Lightness</label><input type="range" id="lig" min="35" max="85" value="62"><output id="ligO"></output></div>
+        <div class="slider"><label for="chr">Chroma</label><input type="range" id="chr" min="0" max="30" value="17"><output id="chrO"></output></div>
+      </div>
+      <div class="harm-out">
+        <div class="panel harm-desc"><h3 id="harmName"></h3><button class="chip" type="button" id="copyColors">複製 CSS Token</button><p id="harmText"></p></div>
+        <div class="swatches" id="swatches"></div>
+        <div class="roles-demo">
+          <div class="rd-ui show" id="rdUi">
+            <div class="r-nav" data-role="surface"><b>Northwind</b><span>產品</span><span>價格</span></div>
+            <div class="r-hero">
+              <span class="r-badge" data-role="accent">NEW</span>
+              <h4 data-role="text">把配色放回真實介面</h4>
+              <p data-role="muted">Text Muted 用在次要說明。卡片用 Surface，分隔用 Border。</p>
+              <div class="r-row"><span class="r-btn" data-role="primary">Primary CTA</span><span class="r-btn2" data-role="secondary">Secondary</span></div>
+            </div>
+            <div class="r-cards"><div class="r-card" data-role="border"><b>Surface 卡片</b><span>Border 分出層級</span></div><div class="r-card" data-role="bg 在外圍"><b>第二張卡片</b><span>同樣的角色</span></div></div>
+            <div class="r-sem" id="rSem"></div>
+          </div>
+          <div class="rd-side">
+            <div class="filters"><button class="chip" type="button" id="modeBtn" aria-pressed="false">深色模式</button><button class="chip" type="button" id="labelBtn" aria-pressed="true">角色標籤</button></div>
+            <div id="rdChecks" style="display:grid;gap:8px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lab2">
+      <div class="panel">
+        <div class="sub-head"><h3>Lightness 比 Hue 重要</h3><span>同一色相，只改明度距離</span></div>
+        <div class="slider" style="grid-template-columns:90px minmax(0,1fr) 46px"><label for="lgap">明度距離</label><input type="range" id="lgap" min="4" max="60" value="12"><output id="lgapO"></output></div>
+        <div class="lgap" id="lgapBox">
+          <div><div class="m"><div class="c"><b>標題文字</b><span>次要說明文字</span></div><span>背景上的說明</span></div><small>彩色</small></div>
+          <div><div class="m gray"><div class="c"><b>標題文字</b><span>次要說明文字</span></div><span>背景上的說明</span></div><small>去色後（只剩明度）</small></div>
+        </div>
+        <p id="lgapMsg"></p>
+      </div>
+      <div class="panel">
+        <div class="sub-head"><h3>對比檢查</h3><span>WCAG 2.2：一般文字 4.5:1，大字 3:1</span></div>
+        <div class="cc-inputs">
+          <label for="ccFgT">文字<span class="pick"><input type="color" id="ccFg" value="#8e8e93" aria-label="文字顏色"><input type="text" id="ccFgT" value="#8E8E93"></span></label>
+          <label for="ccBgT">背景<span class="pick"><input type="color" id="ccBg" value="#ffffff" aria-label="背景顏色"><input type="text" id="ccBgT" value="#FFFFFF"></span></label>
+        </div>
+        <div class="cc-sample" id="ccSample"><span class="big">大字 24px 標題</span><span class="sm">一般內文 15px，淺灰色的次要說明常常在這裡不及格。</span></div>
+        <div class="cc-res" id="ccRes"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="zone wrap" id="builder">
+    <div class="zone-head">
+      <div><div class="eyebrow">Context Prompt <span class="stepref">STEP 04 · 05</span></div><h2>Prompt 組裝器</h2></div>
+      <p class="lede">不用記工具名稱。挑參考圖、點版面、點字體、點一個記憶點，最下面會組成可以直接貼給 Claude Code、Codex、Cursor 的 Prompt，並附上要去哪個網站找元件。</p>
+    </div>
+
+    <div class="bstep">
+      <header><b>A</b><h3>參考圖</h3><span>最多 4 張，每張標記要學它的哪一點</span></header>
+      <div class="body">
+        <div class="search" style="margin-bottom:10px"><span>&gt;_</span><input id="refQ" type="search" placeholder="篩選範本：glass、dashboard、bento…" aria-label="篩選範本"></div>
+        <div class="refpick" id="refPick"></div>
+        <div class="upload" id="upload">
+          <label class="btn ghost" for="upFile">上傳自己的參考圖</label>
+          <input type="file" id="upFile" accept="image/*" multiple>
+          <span>也可以直接把圖片拖進這個框。圖片只留在你的瀏覽器裡，貼 Prompt 時記得一起附上。</span>
+        </div>
+        <div class="chosen" id="chosen"></div>
+      </div>
+    </div>
+    <div class="bstep"><header><b>B</b><h3>版面</h3><span>Layout</span></header><div class="body"><div class="cards" id="pickLayout"></div></div></div>
+    <div class="bstep"><header><b>C</b><h3>字體氣質</h3><span>Typography</span></header><div class="body"><div class="cards" id="pickType"></div></div></div>
+    <div class="bstep"><header><b>D</b><h3>唯一的記憶點</h3><span>80 / 15 / 5 的那 5%，只挑一個</span></header><div class="body"><div class="cards" id="pickFx"></div></div></div>
+    <div class="bstep"><header><b>E</b><h3>元件底座與動效</h3><span>Component · Motion</span></header><div class="body" style="display:grid;gap:14px"><div class="cards" id="pickBase"></div><div class="cards" id="pickMotion"></div></div></div>
+    <div class="bstep">
+      <header><b>→</b><h3>Prompt</h3><span>配色自動帶入色彩實驗室目前的結果</span></header>
+      <div class="body" style="display:grid;gap:12px">
+        <div class="field"><label for="bType">網站是做什麼的</label><input id="bType" value="AI 監控 SaaS 的產品官網"></div>
+        <div class="filters"><button class="btn" type="button" id="copyPrompt">複製 Prompt</button><a class="btn ghost" href="#color">調整配色</a></div>
+      </div>
+      <pre class="code" id="promptOut"></pre>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>REF.SYS / Atlas — 整理自〈AI 時代的網站設計資源地圖〉</span>
+    <span>封面圖版權屬各網站所有</span>
+  </div>
+</footer>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+  const IMG = "img/";
+  const tplHref = slug => `../styles/${slug}.html`;
+
+  // ---------- data ----------
+  const LAYERS = [
+    { id: "inspiration", name: "Inspiration", zh: "整站靈感", q: "這個網站可以長什麼樣子？" },
+    { id: "ux", name: "UX Pattern", zh: "產品流程", q: "使用者怎麼完成任務？" },
+    { id: "foundation", name: "UI Foundation", zh: "基礎元件", q: "Button、Form、Dialog 從哪來？" },
+    { id: "expressive", name: "Expressive UI", zh: "視覺元件", q: "品牌感和記憶點從哪來？" },
+    { id: "motion", name: "Motion", zh: "動效", q: "東西要怎麼動？" },
+    { id: "3d", name: "3D", zh: "立體 / WebGL", q: "真的需要 3D 嗎？" },
+    { id: "assets", name: "Visual Assets", zh: "照片與字體", q: "圖片、影片、字體用什麼？" },
+    { id: "system", name: "Design System", zh: "色彩與品質", q: "顏色、對比、Token 怎麼定？" }
+  ];
+  const R = [
+    ["awwwards", "Awwwards", "https://www.awwwards.com/", "inspiration", "高端品牌、藝術型網站、3D、互動敘事", "找可能性，不要照抄", ["品牌", "3D", "互動敘事"], 0],
+    ["godly", "Godly", "https://godly.website/", "inspiration", "新潮 Web、實驗性視覺", "Hero、轉場、特殊 Layout", ["實驗", "Hero", "轉場"], 1],
+    ["landbook", "Land-book", "https://land-book.com/", "inspiration", "商業網站、Landing Page", "找可落地的排版", ["landing", "商業"], 1],
+    ["lapa", "Lapa Ninja", "https://www.lapa.ninja/", "inspiration", "Landing Page、完整長頁", "研究 Hero → CTA → Footer 的敘事", ["landing", "長頁", "CTA"], 1],
+    ["mobbin", "Mobbin", "https://mobbin.com/", "ux", "真實產品 UI、Flow", "登入、Onboarding、Pricing、Dashboard", ["flow", "onboarding", "pricing", "dashboard"], 1],
+    ["saasframe", "SaaSFrame", "https://www.saasframe.io/", "ux", "SaaS Landing、產品介面、Email Flow", "B2B、AI SaaS、Dashboard", ["saas", "b2b", "dashboard"], 1],
+    ["pageflows", "Page Flows", "https://pageflows.com/", "ux", "UX Interaction Flow", "看使用者怎麼完成任務", ["flow", "影片"], 0],
+    ["shadcn", "shadcn/ui", "https://ui.shadcn.com/", "foundation", "Button、Dialog、Form、Table、Sidebar", "React / Next.js 的 Design System 基底", ["react", "tailwind", "元件"], 1],
+    ["figma", "Figma Community", "https://www.figma.com/community", "foundation", "UI Kit、Wireframe、Design System", "設計端的正式元件與模板", ["figma", "ui kit"], 0],
+    ["21st", "21st.dev", "https://21st.dev/", "expressive", "Hero、Cards、Shader、AI Chat UI", "Code + Prompt，支援 MCP", ["mcp", "prompt", "ai", "hero"], 1],
+    ["aceternity", "Aceternity UI", "https://ui.aceternity.com/", "expressive", "3D Card、Beam、Spotlight、Globe", "高質感 Landing Page", ["3d card", "beam", "spotlight"], 1],
+    ["magicui", "Magic UI", "https://magicui.design/", "expressive", "Bento、Beam、Text Effect、Marquee", "乾淨的 SaaS / AI Landing 視覺", ["bento", "marquee", "particles"], 1],
+    ["motion", "Motion", "https://motion.dev/", "motion", "Hover、Drag、Scroll、Micro-interaction", "React 動效首選，支援 AI Agent", ["react", "hover", "scroll"], 1],
+    ["gsap", "GSAP", "https://gsap.com/", "motion", "Scroll Animation、Pin、Timeline", "Apple 式長頁、Scroll storytelling", ["scroll", "timeline"], 1],
+    ["lottie", "LottieFiles", "https://lottiefiles.com/", "motion", "Loader、Icon Animation", "輕量動態素材", ["loader", "icon"], 0],
+    ["rive", "Rive", "https://rive.app/", "motion", "互動插畫、Mascot", "State Machine 讓動畫回應操作", ["state machine", "mascot"], 0],
+    ["spline", "Spline", "https://spline.design/", "3d", "Hero 3D、產品展示", "非工程師也能做 3D，支援 MCP", ["3d", "mcp"], 1],
+    ["threejs", "Three.js", "https://threejs.org/examples/", "3d", "WebGL、Shader、Particle", "真的要客製化時才用", ["webgl", "shader"], 1],
+    ["unsplash", "Unsplash", "https://unsplash.com/", "assets", "品牌 Hero、大圖", "確認人物與商標權利", ["照片", "免費"], 0],
+    ["pexels", "Pexels", "https://www.pexels.com/", "assets", "Photo + Video", "背景影片好用", ["照片", "影片", "免費"], 0],
+    ["typewolf", "Typewolf", "https://www.typewolf.com/", "assets", "真實網站字體、Font Pairing", "看別人怎麼用字體", ["字體", "pairing"], 1],
+    ["gfonts", "Google Fonts", "https://fonts.google.com/", "assets", "免費 Web Font", "開源、載入容易", ["字體", "免費"], 1],
+    ["adobefonts", "Adobe Fonts", "https://fonts.adobe.com/", "assets", "商業字體", "Adobe 訂閱可用", ["字體", "商業"], 1],
+    ["colorhunt", "Color Hunt", "https://colorhunt.co/", "system", "現成 Palette", "最快的 Moodboard", ["配色", "palette"], 0],
+    ["canva", "Canva Colors", "https://www.canva.com/colors/", "system", "圖片抽色、Color Wheel", "非設計師最好上手", ["配色", "抽色"], 1],
+    ["adobecolor", "Adobe Color", "https://color.adobe.com/", "system", "Color Harmony、抽色", "系統化建立品牌色", ["配色", "harmony"], 0],
+    ["realtime", "Realtime Colors", "https://www.realtimecolors.com/", "system", "把 Palette 套在網站上看", "驗證配色", ["配色", "驗證"], 1],
+    ["colorzilla", "ColorZilla", "https://www.colorzilla.com/chrome/", "system", "Eyedropper、Color Analyzer", "直接吸 HEX", ["吸色", "extension"], 1],
+    ["sitepalette", "Site Palette", "https://palette.site/", "system", "一鍵抽整站 Palette", "匯出色盤", ["吸色", "extension"], 1],
+    ["csspeeper", "CSS Peeper", "https://csspeeper.com/", "system", "Color、Font、Spacing、Asset", "拆別人網站的 Design DNA", ["reverse", "spacing", "字體"], 1],
+    ["oklch", "OKLCH Picker", "https://oklch.com/", "system", "系統化色階", "做 Design Token", ["oklch", "token"], 1],
+    ["webaim", "WebAIM Contrast", "https://webaim.org/resources/contrastchecker/", "system", "Contrast Ratio", "一般文字 AA ≥ 4.5:1", ["a11y", "wcag", "對比"], 1]
+  ].map(([id, name, url, layer, best, use, tags, stack]) => ({ id, name, url, layer, best, use, tags, stack: !!stack }));
+  const byId = Object.fromEntries(R.map(r => [r.id, r]));
+
+  const STEPS = [
+    { t: "Reference", zh: "找參考", line: "挑 3–5 個網站，每個只拿一個重點。", layers: ["inspiration", "ux"], tools: ["landbook", "lapa", "godly", "mobbin"], go: [["#recipes", "看風格配方"], ["#gallery", "L1–L2 資源"]], glyph: "ref" },
+    { t: "Design DNA", zh: "拆解", line: "把參考拆成八個維度，AI 才知道要學什麼。", layers: ["system"], tools: ["csspeeper", "colorzilla", "sitepalette"], go: [["#dna", "DNA 拆解台"]], glyph: "dna" },
+    { t: "Design Token", zh: "定規則", line: "色彩角色、字級、間距寫成 Token。", layers: ["assets", "system"], tools: ["realtime", "oklch", "typewolf", "gfonts"], go: [["#color", "色彩實驗室"]], glyph: "token" },
+    { t: "Component", zh: "選元件", line: "一個底座，加一個記憶點。", layers: ["foundation", "expressive", "motion", "3d"], tools: ["shadcn", "magicui", "aceternity", "spline"], go: [["#builder", "挑記憶點"], ["#gallery", "L3–L6 資源"]], glyph: "comp" },
+    { t: "AI Agent", zh: "實作", line: "用 Context Prompt 讓 Agent 組裝。", layers: ["expressive", "3d"], tools: ["21st", "spline"], go: [["#builder", "Prompt 組裝器"]], glyph: "ai" },
+    { t: "Visual QA", zh: "檢查", line: "對比、手機寬度、效能，不過就回 Token 改。", layers: ["system"], tools: ["webaim"], go: [["#color", "對比檢查"]], glyph: "qa" }
+  ];
+
+  const UP = { ui: "UI", "3d": "3D", y2k: "Y2K", oled: "OLED", hud: "HUD", ai: "AI", v2: "v2" };
+  const T = s => s.replace(/^\d+-/, "").split("-").map(w => UP[w] || w[0].toUpperCase() + w.slice(1)).join(" ");
+  const TEMPLATES = "01-minimalism 02-neumorphism 03-glassmorphism 04-brutalism 05-3d-hyperrealism 06-vibrant-block 07-dark-mode-oled 08-accessible 09-claymorphism 10-aurora-ui 11-retro-futurism 12-flat-design 13-skeuomorphism 14-liquid-glass 15-motion-driven 16-micro-interactions 17-inclusive-design 18-zero-interface 19-soft-ui-evolution 20-hero-centric 21-conversion-optimized 22-feature-rich 23-minimal-direct 24-social-proof 25-interactive-demo 26-trust-authority 27-storytelling 28-data-dense-dashboard 29-heatmap-density 30-executive-summary 31-real-time-monitoring 32-drill-down-analytics 33-comparative-analytics 34-predictive-analytics 35-user-behavior-analytics 36-financial-analytics 37-sales-intelligence 38-neubrutalism 39-bento-box 40-y2k-revival 41-cyberpunk 42-organic-biophilic 43-ai-native 44-memphis-revival 45-vaporwave 46-dimensional-layering 47-exaggerated-minimalism 48-kinetic-typography 49-parallax-storytelling 50-swiss-modernism 51-hud-scifi 52-pixel-art 53-bento-grids 54-neubrutalism-v2 55-spatial-ui 56-e-ink-paper 57-gen-z-chaos"
+    .split(" ").map(slug => ({ slug, name: T(slug), img: `${IMG}styles/${slug}.webp`, href: tplHref(slug) }));
+  const tplBy = Object.fromEntries(TEMPLATES.map(t => [t.slug, t]));
+
+  const RECIPES = [
+    { name: "Apple / 高級科技", shots: [["01-minimalism", "留白與字級", "一句大標、極少元素，畫面靠留白撐住。", ["Layout", "Typography"]], ["47-exaggerated-minimalism", "超大標題", "標題本身就是主視覺。", ["Typography"]], ["05-3d-hyperrealism", "3D 主視覺", "Hero 只放一個 3D 物件，其他全部讓路。", ["Imagery"]]],
+      ref: ["awwwards", "landbook"], comp: ["shadcn"], motion: ["gsap", "spline"], type: ["typewolf", "realtime"], note: "",
+      band: ["產品段落、規格表、比較表", "大量留白、產品攝影、單一 CTA 色", "GSAP 捲動時 3D 產品旋轉"] },
+    { name: "AI SaaS", shots: [["43-ai-native", "AI 對話介面", "產品本身就是 Hero：直接展示對話與結果。", ["Component"]], ["53-bento-grids", "Bento 功能區", "不等大的格子讓功能有主次。", ["Layout"]], ["22-feature-rich", "功能長頁", "Hero → 功能 → 社會證明 → CTA 的標準節奏。", ["Layout", "Component"]]],
+      ref: ["saasframe", "mobbin"], comp: ["shadcn", "magicui"], motion: ["motion"], type: ["oklch"], note: "Inter / Geist",
+      band: ["Pricing、Feature Bento、FAQ、Logo 牆", "深色 Neutral、柔和 Primary", "Hero 下方一條 Animated Beam"] },
+    { name: "Future / Cyber", shots: [["41-cyberpunk", "霓虹與暗底", "深色背景配單一霓虹強調色。", ["Color"]], ["51-hud-scifi", "HUD 介面", "細線框、等寬字、數據面板。", ["Shape", "Typography"]], ["11-retro-futurism", "復古未來", "網格與發光字，記憶點集中在 Hero。", ["Imagery"]]],
+      ref: ["godly"], comp: ["aceternity", "21st"], motion: ["threejs"], type: [], note: "Dark Neutral + Neon Accent",
+      band: ["清楚的導覽與內容區", "等寬字、霓虹 Accent、直角", "Three.js Shader 背景"] },
+    { name: "Magazine / Editorial", shots: [["50-swiss-modernism", "瑞士網格", "粗體無襯線與嚴格網格。", ["Layout", "Typography"]], ["56-e-ink-paper", "紙本閱讀感", "Serif 標題、窄欄、行高寬鬆。", ["Typography"]], ["27-storytelling", "敘事開場", "一句話開場，往下捲動才展開內容。", ["Layout"]]],
+      ref: ["landbook", "typewolf"], comp: [], motion: [], type: [], note: "Serif + Grotesk",
+      band: ["文章列表、分類、閱讀版面", "Serif 標題、欄線、刊頭", "首篇大圖的淡入"] },
+    { name: "Creative Portfolio", shots: [["48-kinetic-typography", "動態字體", "字本身會動，就是作品集的記憶點。", ["Typography", "Motion"]], ["38-neubrutalism", "粗框高對比", "黑框、硬陰影、飽和色塊。", ["Shape", "Color"]], ["49-parallax-storytelling", "視差敘事", "捲動時前後景分離。", ["Motion"]]],
+      ref: ["awwwards", "godly"], comp: [], motion: ["gsap", "threejs"], type: [], note: "高對比 Typography",
+      band: ["作品列表、案例頁、聯絡", "超大字、黑底、單一強調色", "GSAP 作品轉場"] },
+    { name: "企業顧問 / B2B", shots: [["26-trust-authority", "信任感", "Serif 標題、深色導覽、客戶 Logo。", ["Typography", "Color"]], ["30-executive-summary", "數據摘要", "用數字說服，卡片排整齊。", ["Component"]], ["21-conversion-optimized", "轉換表單", "左邊說價值，右邊直接留資料。", ["Layout"]]],
+      ref: ["lapa", "saasframe"], comp: ["shadcn"], motion: [], type: [], note: "Neutral + 單一 Accent",
+      band: ["服務說明、案例、團隊、表單", "深藍 Neutral、單一 Accent", "關鍵數字的計數動畫"] },
+    { name: "教育 / 內容品牌", shots: [["42-organic-biophilic", "溫和自然", "大地色、圓角、Serif 標題。", ["Color", "Typography"]], ["09-claymorphism", "黏土感卡片", "圓潤、柔和陰影，親切不嚴肅。", ["Shape"]], ["25-interactive-demo", "互動導覽", "一步一步帶使用者試用。", ["Component"]]],
+      ref: ["lapa", "landbook"], comp: ["shadcn", "21st"], motion: ["rive", "lottie"], type: [], note: "Editorial Typography",
+      band: ["課程目錄、學習路徑、文章", "Editorial 字體、暖色 Primary", "Rive 吉祥物回應點擊"] }
+  ];
+
+  const DIMS = ["Layout", "Typography", "Color", "Shape", "Density", "Imagery", "Motion", "Component"];
+  const DNA = [
+    { id: "layout", name: "Layout", get: "Grid、Container Width、Section Rhythm" },
+    { id: "typography", name: "Typography", get: "Typeface、Scale、Weight、Line Height" },
+    { id: "color", name: "Color", get: "Background / Surface / Text / Accent" },
+    { id: "shape", name: "Shape", get: "Radius、Border、Shadow" },
+    { id: "density", name: "Density", get: "Padding、Whitespace、Information Density" },
+    { id: "imagery", name: "Imagery", get: "Photo / Illustration / 3D / Editorial" },
+    { id: "motion", name: "Motion", get: "Hover / Scroll / Transition / Parallax" },
+    { id: "component", name: "Component", get: "Navbar、Hero、Card、CTA、Footer" }
+  ];
+
+  const LAYOUTS = [
+    { id: "center", name: "置中 Hero", d: "置中大標題與一個 CTA，下方三欄功能卡片", html: `<div class="wf wf-center"><i></i><i class="k"></i><i></i><i class="k"></i><div class="row"><i></i><i></i><i></i></div></div>` },
+    { id: "split", name: "左右分割", d: "左半邊標題、說明與按鈕，右半邊放主視覺", html: `<div class="wf wf-split"><div class="l"><i class="k"></i><i></i><i class="k"></i></div><i></i></div>` },
+    { id: "bento", name: "Bento 格", d: "大小不一的格子拼成功能區，最重要的功能佔最大格", html: `<div class="wf wf-bento"><i class="k"></i><i></i><i></i><i></i></div>` },
+    { id: "edit", name: "雜誌欄位", d: "刊頭大標橫跨全寬，下方分欄排文章，主欄較寬", html: `<div class="wf wf-edit"><i class="k"></i><i></i><i></i><i></i></div>` },
+    { id: "story", name: "捲動敘事", d: "長頁，每一段圖文左右交錯，往下捲動逐段出現", html: `<div class="wf wf-story"><div class="r"><i class="k"></i><i></i></div><div class="r"><i class="k"></i><i></i></div><div class="r"><i class="k"></i><i></i></div></div>` },
+    { id: "dash", name: "儀表板", d: "左側導覽列，主區上方 KPI 卡片、下方圖表", html: `<div class="wf wf-dash"><i></i><div class="m"><div class="t"><i class="k"></i><i></i><i></i></div><i></i></div></div>` }
+  ];
+  const TYPES = [
+    { id: "geo", name: "幾何無襯線", d: "幾何無襯線字（如 Inter、Geist），標題粗、字距收緊，內文 16–17px", font: "'Inter', sans-serif", w: 800, sample: "Aa 設計", src: "gfonts" },
+    { id: "serif", name: "襯線編輯感", d: "標題用襯線字（如 Instrument Serif），內文用無襯線，行高 1.6 以上", font: "'Instrument Serif', Georgia, serif", w: 400, sample: "Aa 閱讀", src: "typewolf" },
+    { id: "mono", name: "等寬科技", d: "標題與標籤用等寬字（如 JetBrains Mono），內文用無襯線，小標全大寫", font: "'JetBrains Mono', monospace", w: 700, sample: "Aa_01", src: "gfonts" },
+    { id: "display", name: "超大展示", d: "窄體粗標題字（如 Anton），字級極大、全大寫，內文保持小而安靜", font: "'Anton', Impact, sans-serif", w: 400, sample: "AA BIG", src: "adobefonts" }
+  ];
+  const FX = [
+    { id: "beam", name: "Animated Beam", d: "Hero 下方用一條發光線條在幾個圖示之間流動，表達資料串接", res: "magicui", cls: "fx-beam", inner: "" },
+    { id: "spot", name: "Spotlight", d: "Hero 背景一道柔和光暈，緩慢移動或跟隨游標", res: "aceternity", cls: "fx-spot", inner: "" },
+    { id: "marq", name: "Logo Marquee", d: "客戶 Logo 橫向無限輪播，放在 Hero 正下方", res: "magicui", cls: "fx-marq", inner: "<span>ACME · NORTH · LUMEN · ORBIT · ACME · NORTH · LUMEN · ORBIT ·</span>" },
+    { id: "tilt", name: "3D Card", d: "產品截圖卡片隨游標做 3D 傾斜", res: "aceternity", cls: "fx-tilt", inner: "<span></span>" },
+    { id: "part", name: "Particles", d: "Hero 背景有少量緩慢漂浮的粒子", res: "magicui", cls: "fx-part", inner: Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 37) % 100}%;top:${60 + (i * 13) % 30}%;animation-delay:-${(i * .7) % 4}s"></i>`).join("") },
+    { id: "text", name: "Text Shimmer", d: "主標題有一道光從左掃到右", res: "magicui", cls: "fx-text", inner: "<span>HEADLINE</span>" },
+    { id: "cube", name: "3D 物件", d: "Hero 右側放一個可旋轉、可互動的 3D 物件", res: "spline", cls: "fx-cube", inner: "<span><i></i><i></i><i></i><i></i><i></i><i></i></span>" },
+    { id: "scroll", name: "Scroll Pin", d: "捲動時固定畫面，內容一段段替換（Apple 式產品展示）", res: "gsap", cls: "fx-scroll", inner: "<b></b><span></span><span></span><span></span>" },
+    { id: "none", name: "不放", d: "", res: null, cls: "fx-none", inner: "<span>穩定就好</span>" }
+  ];
+  const BASES = [
+    { id: "shadcn", d: "元件底座用 shadcn/ui（React + Tailwind），元件放進專案自己改" },
+    { id: "figma", d: "先從 Figma Community 的 UI Kit 取元件，再轉成程式碼" },
+    { id: "21st", d: "Hero、Navbar、Card 從 21st.dev 搜尋（可用它的 MCP 讓 Agent 直接找元件）" }
+  ];
+  const MOTIONS = [
+    { id: "motion", d: "微互動用 Motion：hover 上浮、進場淡入，時間 150–250ms" },
+    { id: "gsap", d: "長頁捲動敘事用 GSAP ScrollTrigger" },
+    { id: "rive", d: "互動插畫或吉祥物用 Rive" },
+    { id: "lottie", d: "Loader 與小圖示動畫用 LottieFiles" }
+  ];
+
+  // ---------- helpers ----------
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  let toastT;
+  const toast = m => { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 1600); };
+  async function copy(text, ok) { try { await navigator.clipboard.writeText(text); toast(ok); } catch { toast("瀏覽器不允許複製，請手動選取文字"); } }
+  const cover = id => `${IMG}res/${id}.webp`;
+  const toolMini = id => { const r = byId[id]; return `<a class="tool-mini" href="${r.url}" target="_blank" rel="noopener"><img src="${cover(id)}" alt="" loading="lazy"><span>${esc(r.name)}</span></a>`; };
+  const pad2 = n => String(n).padStart(2, "0");
+
+  const savedTheme = store.get("atlas-theme");
+  if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+  $("#themeBtn").addEventListener("click", () => {
+    const cur = document.documentElement.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next); store.set("atlas-theme", next);
+    paintColor();
+  });
+
+  // ---------- color math (needed by glyphs too) ----------
+  const lin = c => c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;
+  const gam = c => c <= .0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - .055;
+  function oklchRaw(L, C, H) {
+    const h = H * Math.PI / 180, a = C * Math.cos(h), b = C * Math.sin(h);
+    const l = (L + .3963377774 * a + .2158037573 * b) ** 3, m = (L - .1055613458 * a - .0638541728 * b) ** 3, s = (L - .0894841775 * a - 1.2914855480 * b) ** 3;
+    return [4.0767416621 * l - 3.3077115913 * m + .2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - .3413193965 * s, -.0041960863 * l - .7034186147 * m + 1.7076147010 * s];
+  }
+  const inGamut = v => v.every(x => x >= -1e-4 && x <= 1 + 1e-4);
+  function oklchToRgb(L, C, H) {
+    // reduce chroma until the color fits in sRGB
+    let rgb = oklchRaw(L, C, H);
+    if (!inGamut(rgb)) { let lo = 0, hi = C; for (let i = 0; i < 18; i++) { const mid = (lo + hi) / 2; inGamut(oklchRaw(L, mid, H)) ? lo = mid : hi = mid; } rgb = oklchRaw(L, lo, H); }
+    return rgb.map(x => Math.min(1, Math.max(0, gam(Math.max(0, x)))));
+  }
+  const hex = rgb => "#" + rgb.map(x => Math.round(x * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
+  const hexRgb = h => { h = h.replace("#", ""); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); };
+  const lum = h => { const [r, g, b] = hexRgb(h).map(lin); return .2126 * r + .7152 * g + .0722 * b; };
+  const ratio = (a, b) => { const A = lum(a), B = lum(b); return (Math.max(A, B) + .05) / (Math.min(A, B) + .05); };
+  const okc = (L, C, H) => hex(oklchToRgb(Math.min(1, Math.max(0, L)), Math.max(0, C), ((H % 360) + 360) % 360));
+  const bestOn = bg => ratio("#FFFFFF", bg) >= ratio("#111111", bg) ? "#FFFFFF" : "#111111";
+
+  // ---------- map ----------
+  let stepIdx = 0;
+  function renderMatrix() {
+    const s = STEPS[stepIdx];
+    $("#matrix").innerHTML = `<thead><tr><th></th>${STEPS.map((st, i) => `<th class="${i === stepIdx ? "on" : ""}"><button type="button" data-i="${i}" aria-pressed="${i === stepIdx}"><small>${pad2(i + 1)}</small><b>${st.t}</b></button></th>`).join("")}</tr></thead>
+      <tbody>${LAYERS.map((l, li) => `<tr class="${s.layers.includes(l.id) ? "lit" : ""}"><th><a href="#L-${l.id}" data-l="${l.id}"><small>L${li + 1}</small><b>${l.name}</b><span>${l.zh}</span></a></th>
+      ${STEPS.map((st, i) => `<td class="${st.layers.includes(l.id) ? "hit" : ""} ${i === stepIdx ? "col" : ""}"><i></i></td>`).join("")}</tr>`).join("")}</tbody>`;
+  }
+  const GLYPH = {
+    ref: () => `<div class="g-ref">${["20-hero-centric", "53-bento-grids", "50-swiss-modernism"].map(s => `<img src="${tplBy[s].img}" alt="">`).join("")}</div>`,
+    dna: () => `<div class="g-dna">${DIMS.map((d, i) => `<span style="animation-delay:${i * .3}s">${d}</span>`).join("")}</div>`,
+    token: () => `<div class="g-token"><div class="sw">${[[.97, .01, 262], [.92, .02, 262], [.25, .03, 262], [.55, .16, 262], [.75, .15, 160]].map(([l, c, h]) => `<i style="background:${okc(l, c, h)}"></i>`).join("")}</div><div class="ty"><span style="font-size:32px">Aa</span><span style="font-size:22px">Aa</span><span style="font-size:15px">Aa</span><span style="font-size:11px">Aa</span></div><div class="sp">${[4, 8, 12, 16, 24].map(v => `<i style="height:${v}px"></i>`).join("")}</div></div>`,
+    comp: () => `<div class="g-comp"><div class="b"><span>Button</span></div><div class="t"><span></span></div><div>Input</div><div>Card</div><div>Dialog</div><div>Tabs</div></div>`,
+    ai: () => `<div class="g-ai"><em>&gt;</em> Layout 參考 A<br><em>&gt;</em> 字體參考 B、Hero 採 C<br><em>&gt;</em> 全部服從 Design Token <i></i></div>`,
+    qa: () => `<div class="g-qa"><div class="ph"></div><div class="dt"></div><div class="cr">4.5:1<small>AA PASS</small></div></div>`
+  };
+  function renderStep() {
+    const s = STEPS[stepIdx];
+    $("#stepcard").innerHTML = `<div class="top"><small>STEP ${pad2(stepIdx + 1)} · ${s.layers.map(l => "L" + (LAYERS.findIndex(x => x.id === l) + 1)).join(" ")}</small><h3>${s.t} <span style="color:var(--dim);font-size:.7em">${s.zh}</span></h3><p>${s.line}</p></div>
+      <div class="glyph">${GLYPH[s.glyph]()}</div>
+      <div class="tools-strip">${s.tools.map(toolMini).join("")}</div>
+      <div class="go">${s.go.map(([h, t], i) => `<a class="btn ${i ? "ghost" : ""}" href="${h}" data-layers="${h === "#gallery" ? s.layers.join(",") : ""}">${t} →</a>`).join("")}</div>`;
+  }
+  $("#matrix").addEventListener("click", e => {
+    const b = e.target.closest("button[data-i]");
+    if (b) { stepIdx = +b.dataset.i; renderMatrix(); renderStep(); return; }
+    const a = e.target.closest("a[data-l]");
+    if (a) { state.layers = new Set([a.dataset.l]); renderFilters(); renderGallery(); }
+  });
+  $("#stepcard").addEventListener("click", e => {
+    const a = e.target.closest("a[data-layers]");
+    if (a && a.dataset.layers) { state.layers = new Set(a.dataset.layers.split(",")); renderFilters(); renderGallery(); }
+  });
+
+  // ---------- gallery ----------
+  const state = { q: "", layers: new Set(), stack: false };
+  function renderFilters() {
+    $("#layerFilters").innerHTML = `<button class="chip" type="button" data-l="all" aria-pressed="${state.layers.size === 0}">全部</button>` +
+      LAYERS.map((l, i) => `<button class="chip" type="button" data-l="${l.id}" aria-pressed="${state.layers.has(l.id)}">L${i + 1} ${l.name}</button>`).join("");
+  }
+  $("#layerFilters").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    const l = b.dataset.l;
+    if (l === "all") state.layers.clear(); else state.layers.has(l) ? state.layers.delete(l) : state.layers.add(l);
+    renderFilters(); renderGallery();
+  });
+  $("#stackOnly").addEventListener("click", e => { state.stack = !state.stack; e.currentTarget.setAttribute("aria-pressed", state.stack); renderGallery(); });
+  $("#q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); renderGallery(); });
+  document.addEventListener("keydown", e => { if (e.key === "/" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); $("#q").focus(); } });
+  function renderGallery() {
+    let total = 0;
+    const html = LAYERS.map((l, li) => {
+      if (state.layers.size && !state.layers.has(l.id)) return "";
+      const list = R.filter(r => r.layer === l.id && (!state.stack || r.stack) && (!state.q || state.q.split(/\s+/).every(t => [r.name, r.best, r.use, l.name, l.zh, ...r.tags].join(" ").toLowerCase().includes(t))));
+      if (!list.length) return "";
+      total += list.length;
+      const steps = STEPS.map((s, i) => s.layers.includes(l.id) ? `<span class="tag">STEP ${pad2(i + 1)}</span>` : "").join("");
+      return `<div class="layer-group" id="L-${l.id}"><div class="layer-head"><span class="ln">L${li + 1}</span><h3>${l.name}<span>${l.zh} · ${l.q}</span></h3><div class="st">${steps}</div></div>
+        <div class="gallery">${list.map(r => `<div><a class="frame" href="${r.url}" target="_blank" rel="noopener">
+          <div class="canvas"><img src="${cover(r.id)}" alt="${esc(r.name)} 封面" loading="lazy">${r.stack ? `<span class="stamp">STACK</span>` : ""}</div>
+          <div class="plaque"><div class="row"><h4>${esc(r.name)}</h4><span>↗</span></div><p><b>${esc(r.best)}</b></p><p>${esc(r.use)}</p></div></a>
+          <div class="urlrow"><code>${esc(r.url)}</code><button type="button" data-copy="${esc(r.url)}">複製網址</button></div></div>`).join("")}</div></div>`;
+    }).join("");
+    $("#count").textContent = `${pad2(total)} / ${R.length}`;
+    $("#galleryGroups").innerHTML = html || `<div class="empty">沒有符合的資源。試試「landing」「3D」「配色」，或清除篩選。</div>`;
+  }
+
+  // ---------- recipes ----------
+  let recIdx = 1;
+  $("#recipeTabs").innerHTML = RECIPES.map((r, i) => `<button class="chip" type="button" data-i="${i}" aria-pressed="false">${r.name}</button>`).join("");
+  $("#recipeTabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { recIdx = +b.dataset.i; renderRecipe(); } });
+  function renderRecipe() {
+    const r = RECIPES[recIdx];
+    document.querySelectorAll("#recipeTabs button").forEach((b, i) => b.setAttribute("aria-pressed", i === recIdx));
+    $("#shots").innerHTML = r.shots.map(([slug, title, why, dims], i) => { const t = tplBy[slug]; return `<a class="shot" href="${t.href}" target="_blank" rel="noopener">
+      <div class="pic"><img src="${t.img}" alt="${t.name} 範本截圖" loading="lazy"></div>
+      <div class="cap"><small>${pad2(i + 1)} · ${t.name} · 看 ${dims.join(" / ")}</small><b>${title}</b><span>${why}</span></div></a>`; }).join("");
+    const slot = (label, ids, note) => `<div class="slot"><small>${label}</small>${ids.map(toolMini).join("")}${note ? `<span class="note">${note}</span>` : ""}</div>`;
+    $("#combo").innerHTML = `<div class="combo-row">${slot("Reference", r.ref)}${slot("元件", r.comp, r.comp.length ? "" : "Custom Layout")}${slot("Motion / 3D", r.motion, r.motion.length ? "" : "少量 / 微動效")}${slot("字體 / 色彩", r.type, r.note)}</div>
+      <div class="combo-side"><small class="eyebrow">80 / 15 / 5</small><div class="ratio"><span>80</span><span>15</span><span>5</span></div>
+        <ul><li><b>80%</b><span>${r.band[0]}</span></li><li><b>15%</b><span>${r.band[1]}</span></li><li><b>5%</b><span>${r.band[2]}</span></li></ul>
+        <button class="btn" type="button" id="useShots">這三張當參考圖 →</button></div>`;
+    $("#useShots").onclick = () => {
+      refs.splice(0, refs.length, ...r.shots.map(([slug, , , dims]) => ({ key: slug, name: tplBy[slug].name, img: tplBy[slug].img, dims: new Set(dims) })));
+      renderRefPick(); renderChosen(); buildPrompt(); $("#builder").scrollIntoView(); toast("已加入 3 張參考圖");
+    };
+  }
+
+  // ---------- DNA lab: overlays are measured from the live DOM ----------
+  let dnaIdx = 0;
+  $("#dnaBtns").innerHTML = DNA.map((d, i) => `<button type="button" data-i="${i}" aria-pressed="false">${d.name}<small>${pad2(i + 1)}</small></button>`).join("");
+  $("#dnaBtns").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { dnaIdx = +b.dataset.i; renderDna(); } });
+  const rgbHex = c => { const m = c.match(/[\d.]+/g); if (!m) return c; return "#" + m.slice(0, 3).map(v => Math.round(+v).toString(16).padStart(2, "0")).join("").toUpperCase(); };
+  const px = v => Math.round(parseFloat(v));
+  function renderDna() {
+    const d = DNA[dnaIdx], host = $("#siteHost"), ov = $("#ov");
+    document.querySelectorAll("#dnaBtns button").forEach((b, i) => b.setAttribute("aria-pressed", i === dnaIdx));
+    host.classList.toggle("play", d.id === "motion");
+    const H = host.getBoundingClientRect();
+    // getBoundingClientRect includes transforms; motion state uses offset geometry so boxes match the resting layout + transform
+    const rect = el => { const r = el.getBoundingClientRect(); return { x: r.left - H.left, y: r.top - H.top, w: r.width, h: r.height }; };
+    const out = [], used = [];
+    const label = (x, y, text, sw) => {
+      // push a label down while it collides with an earlier one
+      let ly = y; const w = text.length * 6.7 + (sw ? 24 : 14);
+      x = Math.min(Math.max(0, x), H.width - w);
+      for (let k = 0; k < 10 && used.some(u => Math.abs(u.y - ly) < 17 && x < u.x + u.w && x + w > u.x); k++) ly += 18;
+      used.push({ x, y: ly, w });
+      out.push(`<span class="lb" style="left:${x}px;top:${Math.max(0, ly)}px">${sw ? `<i style="background:${sw}"></i>` : ""}${esc(text)}</span>`);
+    };
+    const box = (r, cls = "") => out.push(`<span class="bx ${cls}" style="left:${r.x}px;top:${r.y}px;width:${r.w}px;height:${r.h}px"></span>`);
+    const q = s => [...$("#site").querySelectorAll(s)];
+    const above = r => r.y - 18;
+    let note = "";
+    if (d.id === "layout") {
+      const c = q("[data-layout]")[0], cs = getComputedStyle(c), r = rect(c);
+      const pl = parseFloat(cs.paddingLeft), pr = parseFloat(cs.paddingRight), inner = r.w - pl - pr, gap = 16, cw = (inner - gap * 11) / 12;
+      for (let i = 0; i < 12; i++) out.push(`<span class="col" style="left:${r.x + pl + i * (cw + gap)}px;top:${r.y}px;width:${cw}px;height:${r.h}px"></span>`);
+      box(r, "dash"); label(r.x + 4, r.y + 4, `container max ${px(cs.maxWidth)}px · 12 col · gutter ${gap}`);
+      const heroEl = q("[data-hero]")[0], featEl = q("[data-features]")[0], hero = rect(heroEl), feat = rect(featEl);
+      const heroCols = getComputedStyle(heroEl).gridTemplateColumns.split(" ").map(px);
+      box(hero); label(hero.x, hero.y + hero.h - 18, `Hero 2 欄 ${heroCols.join(" : ")}px`);
+      const gapH = feat.y - hero.y - hero.h;
+      out.push(`<span class="gap" style="left:${feat.x + feat.w - 24}px;top:${hero.y + hero.h}px;height:${gapH}px"></span>`);
+      label(feat.x + feat.w - 160, hero.y + hero.h + gapH / 2 - 8, `section gap ${px(gapH)}px`);
+      box(feat); label(feat.x, feat.y + feat.h + 4, `Features 3 欄 · gap ${px(getComputedStyle(featEl).columnGap)}px`);
+      note = `container ${px(cs.maxWidth)}px · 12 欄 · 段落間距 ${px(gapH)}px`;
+    } else if (d.id === "typography") {
+      q("[data-type]").forEach(el => { const cs = getComputedStyle(el), r = rect(el); box(r);
+        const lh = cs.lineHeight === "normal" ? "normal" : (parseFloat(cs.lineHeight) / parseFloat(cs.fontSize)).toFixed(2);
+        label(r.x, above(r), `${el.dataset.type} ${px(cs.fontSize)}/${lh} · ${cs.fontWeight} · ${cs.fontFamily.split(",")[0].replace(/["']/g, "")}`); });
+      const h1 = getComputedStyle(q(".d-h1")[0]), p = getComputedStyle(q(".d-p")[0]);
+      note = `H1 ${px(h1.fontSize)}px ÷ Body ${px(p.fontSize)}px = ${(parseFloat(h1.fontSize) / parseFloat(p.fontSize)).toFixed(1)} 倍`;
+    } else if (d.id === "color") {
+      q("[data-color]").forEach(el => { const cs = getComputedStyle(el), r = rect(el);
+        const isText = /Text|Accent/.test(el.dataset.color); const c = rgbHex(isText ? cs.color : cs.backgroundColor);
+        box(r, "dash"); el.dataset.color === "Background" ? label(r.x + 4, r.y + 4, `Background ${c}`, c) : label(r.x, above(r), `${el.dataset.color} ${c}`, c); });
+      note = "每個角色只有一個值；Primary 只出現在 CTA";
+    } else if (d.id === "shape") {
+      q("[data-shape]").forEach(el => { const cs = getComputedStyle(el), r = rect(el); box(r);
+        const bw = px(cs.borderTopWidth); label(r.x, above(r), `radius ${px(cs.borderTopLeftRadius)}${bw ? ` · border ${bw}px` : ""}${cs.boxShadow !== "none" ? " · shadow" : ""}`); });
+      note = "radius 8 / 14 / 18 三級 · 1px border · 陰影只給主視覺";
+    } else if (d.id === "density") {
+      q("[data-dens]").forEach(el => { const cs = getComputedStyle(el), r = rect(el);
+        const [t, rr, b, l] = ["Top", "Right", "Bottom", "Left"].map(k => parseFloat(cs["padding" + k]));
+        out.push(`<span class="pad" style="left:${r.x}px;top:${r.y}px;width:${r.w}px;height:${t}px"></span><span class="pad" style="left:${r.x}px;top:${r.y + r.h - b}px;width:${r.w}px;height:${b}px"></span><span class="pad" style="left:${r.x}px;top:${r.y + t}px;width:${l}px;height:${r.h - t - b}px"></span><span class="pad" style="left:${r.x + r.w - rr}px;top:${r.y + t}px;width:${rr}px;height:${r.h - t - b}px"></span>`);
+        box(r, "dash"); label(r.x + l, r.y + Math.max(0, (t - 17) / 2), `padding ${px(t)} ${px(rr)} ${px(b)} ${px(l)}`); });
+      note = "綠色斜線就是 padding。卡片 20、容器 44 / 32：資訊密度偏鬆";
+    } else if (d.id === "imagery") {
+      q("[data-img]").forEach(el => { const r = rect(el); box(r); label(r.x, above(r), el.dataset.img); });
+      note = "沒有人物照：3D render 當主視覺，圖示用單色線性";
+    } else if (d.id === "motion") {
+      q("[data-motion]").forEach(el => { const cs = getComputedStyle(el), r = rect(el); box(r, "dash");
+        const kind = el.classList.contains("d-img") ? "hover tilt" : el.classList.contains("d-card") ? "hover lift 6px" : el.classList.contains("d-cta") ? "hover lift 2px + glow" : "press";
+        label(r.x, above(r), `${kind} · ${px(parseFloat(cs.transitionDuration) * 1000)}ms`); });
+      note = "畫面停在 hover 狀態；時間取自實際的 transition-duration";
+    } else if (d.id === "component") {
+      q("[data-comp]").forEach(el => { const r = rect(el); box(r, "dash"); label(r.x + 2, r.y + 2, el.dataset.comp); });
+      note = "Navbar · Hero / Split · CTA ×2 · Feature Cards ×3 · Footer";
+    }
+    ov.innerHTML = out.join("");
+    $("#dnaNote").innerHTML = `<b>${d.name}</b><span>AI 應取得：${d.get}</span><span style="color:var(--ink)">${note}</span>`;
+  }
+  // motion state changes transforms: re-measure after the transition settles
+  $("#siteHost").addEventListener("transitionend", () => { if (DNA[dnaIdx].id === "motion") renderDna(); });
+  new ResizeObserver(() => renderDna()).observe($("#siteHost"));
+
+  // ---------- color lab ----------
+  const HARMS = [
+    { id: "mono", name: "Monochromatic", zh: "單色", off: [0], text: "只用一個色相，靠明度與彩度做變化。最安全，品牌感來自明度層次。" },
+    { id: "analog", name: "Analogous", zh: "相鄰色", off: [-30, 0, 30], text: "色環上相鄰 ±30° 的顏色。彼此相近，畫面安靜、一致，適合內容與品牌網站。" },
+    { id: "comp", name: "Complementary", zh: "互補色", off: [0, 180], text: "色環兩端相對 180°。天然高對比：一個當主色，另一個只在 CTA 或焦點少量使用。" },
+    { id: "split", name: "Split Complementary", zh: "分裂互補", off: [0, 150, 210], text: "主色加上互補色兩側（180° ± 30°）。有對比，但比互補色柔和、好控制。" },
+    { id: "tri", name: "Triadic", zh: "三等分", off: [0, 120, 240], text: "色環三等分。活潑但很難控制，通常一個當主色，另外兩個降彩度少量使用。" }
+  ];
+  const col = { hue: 262, L: .62, C: .17, harm: 2, dark: false };
+  let lastRoles = null, lastHarm = null;
+  $("#harm").innerHTML = HARMS.map((h, i) => `<button class="chip" type="button" data-i="${i}" aria-pressed="${i === col.harm}">${h.zh}</button>`).join("");
+  $("#harm").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; col.harm = +b.dataset.i; document.querySelectorAll("#harm button").forEach((x, i) => x.setAttribute("aria-pressed", i === col.harm)); paintColor(); });
+  const wheel = $("#wheel"), wctx = wheel.getContext("2d");
+  let ringCache = null;
+  function drawRing() {
+    const W = wheel.width, c = W / 2, R = W / 2 - 6, r = R * .64;
+    const img = wctx.createImageData(W, W), lut = [];
+    for (let h = 0; h < 360; h++) lut.push(oklchToRgb(.72, .14, h));
+    for (let y = 0; y < W; y++) for (let x = 0; x < W; x++) {
+      const dx = x - c, dy = y - c, d = Math.hypot(dx, dy);
+      if (d < r || d > R) continue;
+      const [rr, gg, bb] = lut[Math.floor((Math.atan2(dy, dx) * 180 / Math.PI + 90 + 360) % 360)];
+      const i = (y * W + x) * 4; img.data[i] = rr * 255; img.data[i + 1] = gg * 255; img.data[i + 2] = bb * 255; img.data[i + 3] = 255;
+    }
+    ringCache = img;
+  }
+  function drawWheel(hues) {
+    const W = wheel.width, c = W / 2, R = W / 2 - 6, r = R * .64, mid = (R + r) / 2;
+    if (!ringCache) drawRing();
+    wctx.clearRect(0, 0, W, W);
+    wctx.putImageData(ringCache, 0, 0);
+    const ink = getComputedStyle(document.body).color;
+    wctx.lineWidth = 2; wctx.strokeStyle = ink;
+    const pts = hues.map(h => { const a = (h - 90) * Math.PI / 180; return [c + Math.cos(a) * mid, c + Math.sin(a) * mid]; });
+    if (pts.length > 1) { wctx.beginPath(); pts.forEach(([x, y], i) => i ? wctx.lineTo(x, y) : wctx.moveTo(x, y)); if (pts.length > 2) wctx.closePath(); wctx.setLineDash([8, 6]); wctx.stroke(); wctx.setLineDash([]); }
+    pts.forEach(([x, y], i) => {
+      wctx.beginPath(); wctx.arc(x, y, i === 0 ? 17 : 12, 0, Math.PI * 2); wctx.fillStyle = okc(col.L, col.C, hues[i]); wctx.fill();
+      wctx.lineWidth = i === 0 ? 4 : 2.5; wctx.strokeStyle = "#fff"; wctx.stroke(); wctx.lineWidth = 1.5; wctx.strokeStyle = "#000"; wctx.stroke();
+    });
+    const base = okc(col.L, col.C, col.hue);
+    wctx.beginPath(); wctx.arc(c, c, r - 18, 0, Math.PI * 2); wctx.fillStyle = base; wctx.fill();
+    wctx.fillStyle = bestOn(base); wctx.font = "600 26px 'JetBrains Mono', monospace"; wctx.textAlign = "center"; wctx.textBaseline = "middle";
+    wctx.fillText(base, c, c - 12); wctx.font = "500 18px 'JetBrains Mono', monospace"; wctx.fillText(`H ${col.hue}°`, c, c + 20);
+  }
+  let dragging = false;
+  const pickHue = e => { const b = wheel.getBoundingClientRect(); const x = e.clientX - b.left - b.width / 2, y = e.clientY - b.top - b.height / 2; col.hue = Math.round((Math.atan2(y, x) * 180 / Math.PI + 90 + 360) % 360); $("#hue").value = col.hue; paintColor(); };
+  wheel.addEventListener("pointerdown", e => { dragging = true; wheel.setPointerCapture(e.pointerId); pickHue(e); });
+  wheel.addEventListener("pointermove", e => { if (dragging) pickHue(e); });
+  wheel.addEventListener("pointerup", () => dragging = false);
+  $("#hue").addEventListener("input", e => { col.hue = +e.target.value; paintColor(); });
+  $("#lig").addEventListener("input", e => { col.L = e.target.value / 100; paintColor(); });
+  $("#chr").addEventListener("input", e => { col.C = e.target.value / 100; paintColor(); });
+  $("#modeBtn").addEventListener("click", e => { col.dark = !col.dark; e.currentTarget.setAttribute("aria-pressed", col.dark); paintColor(); });
+  $("#labelBtn").addEventListener("click", e => { const on = e.currentTarget.getAttribute("aria-pressed") !== "true"; e.currentTarget.setAttribute("aria-pressed", on); $("#rdUi").classList.toggle("show", on); });
+
+  function palette() {
+    const h = HARMS[col.harm], hues = h.off.map(o => (col.hue + o + 360) % 360);
+    const sw = h.id === "mono"
+      ? [-.3, -.15, 0, .14, .26].map(dl => { const L = Math.min(.97, Math.max(.15, col.L + dl)); return { hex: okc(L, col.C * (1 - Math.abs(dl)), col.hue), L, h: col.hue }; })
+      : hues.map(x => ({ hex: okc(col.L, col.C, x), L: col.L, h: x }));
+    const H0 = col.hue, n = (l, c = .012) => okc(l, c, H0);
+    const second = hues[1] ?? H0, last = hues[hues.length - 1];
+    const roles = col.dark
+      ? { bg: n(.17, .012), surface: n(.22, .016), text: n(.95, .008), muted: n(.74, .02), border: n(.32, .02), primary: okc(Math.max(col.L, .7), col.C, H0), secondary: okc(.38, Math.min(col.C, .06), second), accent: h.id === "mono" ? okc(.86, col.C * .7, H0) : okc(.8, col.C, last) }
+      : { bg: n(.985, .006), surface: n(1, 0), text: n(.22, .02), muted: n(.48, .02), border: n(.9, .01), primary: okc(Math.min(col.L, .55), col.C, H0), secondary: okc(.93, Math.min(col.C, .05), second), accent: h.id === "mono" ? okc(.42, col.C, H0) : okc(.52, col.C, last) };
+    roles.onPrimary = bestOn(roles.primary); roles.onSecondary = bestOn(roles.secondary);
+    const semL = col.dark ? .78 : .5;
+    roles.success = okc(semL, .14, 150); roles.warning = okc(col.dark ? .82 : .55, .13, 70); roles.error = okc(semL, .17, 25); roles.info = okc(semL, .12, 240);
+    return { h, hues, sw, roles };
+  }
+  function paintColor() {
+    $("#hueO").textContent = col.hue + "°"; $("#ligO").textContent = col.L.toFixed(2); $("#chrO").textContent = col.C.toFixed(2);
+    const p = palette();
+    drawWheel(p.h.id === "mono" ? [col.hue] : p.hues);
+    $("#harmName").textContent = `${p.h.name} · ${p.h.zh}`;
+    $("#harmText").textContent = p.h.text;
+    $("#swatches").innerHTML = p.sw.map(s => `<button type="button" style="background:${s.hex};color:${bestOn(s.hex)}" data-hex="${s.hex}" title="點一下複製"><b>${s.hex}</b><span>oklch(${s.L.toFixed(2)} ${col.C.toFixed(2)} ${Math.round(s.h)})</span></button>`).join("");
+    const ui = $("#rdUi");
+    for (const [k, v] of Object.entries(p.roles)) ui.style.setProperty("--c-" + k.replace(/[A-Z]/g, x => "-" + x.toLowerCase()), v);
+    $("#rSem").innerHTML = ["success", "warning", "error", "info"].map(k => `<span style="color:${p.roles[k]}">${k.toUpperCase()}</span>`).join("");
+    const checks = [["Text / Bg", "text", "bg", 4.5], ["Muted / Surface", "muted", "surface", 4.5], ["On Primary / Primary", "onPrimary", "primary", 4.5], ["Accent / Bg（大字）", "accent", "bg", 3]];
+    $("#rdChecks").innerHTML = `<small class="eyebrow">Contrast Gate</small>` + checks.map(([nm, f, b, min]) => { const r = ratio(p.roles[f], p.roles[b]); return `<div class="ck"><span>${nm}</span><span>${r.toFixed(1)} <span class="${r >= min ? "pass" : "fail"}">${r >= min ? "PASS" : "FAIL"}</span></span></div>`; }).join("") +
+      `<p style="margin:4px 0 0;color:var(--dim);font-size:.74rem">Background、Surface、Text 是主色相降彩度做出的中性色：有色傾但不搶戲。Primary 用主色，Accent 用和諧中的最後一色。</p>`;
+    lastRoles = p.roles; lastHarm = p.h;
+    paintGap(); buildPrompt();
+  }
+  $("#swatches").addEventListener("click", e => { const b = e.target.closest("button"); if (b) copy(b.dataset.hex, "已複製 " + b.dataset.hex); });
+  const tokenCss = () => `:root {\n${Object.entries(lastRoles).map(([k, v]) => `  --${k.replace(/[A-Z]/g, x => "-" + x.toLowerCase())}: ${v};`).join("\n")}\n}`;
+  $("#copyColors").addEventListener("click", () => copy(tokenCss(), "已複製 CSS Token"));
+
+  function paintGap() {
+    const g = $("#lgap").value / 100, H0 = col.hue;
+    const v = { bg: .97, surface: .97 - g * .12, border: .97 - g * .3, muted: .97 - g * .95, text: Math.max(.16, .97 - g * 1.6) };
+    const c = { bg: okc(v.bg, .03, H0), surface: okc(v.surface, .03, H0), border: okc(v.border, .03, H0), muted: okc(v.muted, .05, H0), text: okc(v.text, .05, H0) };
+    const box = $("#lgapBox");
+    for (const [k, x] of Object.entries(c)) box.style.setProperty("--g-" + k, x);
+    $("#lgapO").textContent = g.toFixed(2);
+    const rt = ratio(c.text, c.bg), rm = ratio(c.muted, c.surface);
+    $("#lgapMsg").innerHTML = `主文字對背景 <b style="color:var(--ink)">${rt.toFixed(1)}:1</b>，次要文字對卡片 <b style="color:var(--ink)">${rm.toFixed(1)}:1</b>。` +
+      (rt < 4.5 ? "明度太近：色相再好看，去色後階層也消失了。把距離往右拉。" : rm < 4.5 ? "主文字夠了，次要文字還不夠。" : "階層清楚：去色後一樣分得出標題、說明與卡片。");
+  }
+  $("#lgap").addEventListener("input", paintGap);
+
+  function paintCC() {
+    const fg = $("#ccFgT").value.trim().toUpperCase(), bg = $("#ccBgT").value.trim().toUpperCase();
+    if (!/^#[0-9A-F]{6}$/.test(fg) || !/^#[0-9A-F]{6}$/.test(bg)) { $("#ccRes").innerHTML = `<span class="fail">請輸入 #RRGGBB 格式</span>`; return; }
+    $("#ccSample").style.cssText = `color:${fg};background:${bg}`;
+    const r = ratio(fg, bg), chip = (ok, t) => `<span class="${ok ? "pass" : "fail"}">${t} ${ok ? "PASS" : "FAIL"}</span>`;
+    $("#ccRes").innerHTML = `<b>${r.toFixed(2)}:1</b>${chip(r >= 4.5, "AA 文字")}${chip(r >= 3, "AA 大字")}${chip(r >= 7, "AAA 文字")}`;
+  }
+  [["#ccFg", "#ccFgT"], ["#ccBg", "#ccBgT"]].forEach(([c, t]) => {
+    $(c).addEventListener("input", e => { $(t).value = e.target.value.toUpperCase(); paintCC(); });
+    $(t).addEventListener("input", e => { const v = e.target.value.trim(); if (/^#[0-9a-fA-F]{6}$/.test(v)) $(c).value = v.toLowerCase(); paintCC(); });
+  });
+
+  // ---------- builder ----------
+  const refs = [];
+  const pick = { layout: "split", type: "geo", fx: "beam", base: "shadcn", motion: "motion" };
+  function renderRefPick() {
+    const q = ($("#refQ").value || "").trim().toLowerCase();
+    $("#refPick").innerHTML = TEMPLATES.filter(t => !q || t.name.toLowerCase().includes(q)).map(t => { const n = refs.findIndex(r => r.key === t.slug);
+      return `<button type="button" data-slug="${t.slug}" aria-pressed="${n >= 0}" data-n="${n >= 0 ? "圖" + (n + 1) : ""}"><img src="${t.img}" alt="" loading="lazy"><span>${t.name}</span></button>`; }).join("");
+  }
+  $("#refQ").addEventListener("input", renderRefPick);
+  $("#refPick").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    const i = refs.findIndex(r => r.key === b.dataset.slug);
+    if (i >= 0) refs.splice(i, 1);
+    else { if (refs.length >= 4) { toast("最多 4 張，先移除一張"); return; } const t = tplBy[b.dataset.slug]; refs.push({ key: t.slug, name: t.name, img: t.img, dims: new Set(["Layout"]) }); }
+    renderRefPick(); renderChosen(); buildPrompt();
+  });
+  function renderChosen() {
+    $("#chosen").innerHTML = refs.map((r, i) => `<div class="chosen-item" data-i="${i}"><img src="${r.img}" alt=""><div><div class="nm">圖${i + 1} · ${esc(r.name)}</div><div class="dims">${DIMS.map(d => `<button type="button" data-d="${d}" aria-pressed="${r.dims.has(d)}">${d}</button>`).join("")}</div></div><button class="x" type="button" aria-label="移除">✕</button></div>`).join("");
+  }
+  $("#chosen").addEventListener("click", e => {
+    const item = e.target.closest(".chosen-item"); if (!item) return;
+    const i = +item.dataset.i, r = refs[i];
+    if (e.target.closest(".x")) { refs.splice(i, 1); renderRefPick(); }
+    else { const d = e.target.closest("button[data-d]")?.dataset.d; if (d) r.dims.has(d) ? r.dims.delete(d) : r.dims.add(d); }
+    renderChosen(); buildPrompt();
+  });
+  function addFiles(files) {
+    for (const f of [...files].filter(f => f.type.startsWith("image/"))) {
+      if (refs.length >= 4) { toast("最多 4 張，先移除一張"); break; }
+      const slot = { key: "up-" + Date.now() + Math.random(), name: f.name, img: "", dims: new Set(["Layout"]), upload: true };
+      refs.push(slot);
+      const rd = new FileReader(); rd.onload = () => { slot.img = rd.result; renderChosen(); }; rd.readAsDataURL(f);
+    }
+    renderRefPick(); renderChosen(); buildPrompt();
+  }
+  $("#upFile").addEventListener("change", e => { addFiles(e.target.files); e.target.value = ""; });
+  const up = $("#upload");
+  up.addEventListener("dragover", e => { e.preventDefault(); up.classList.add("drag"); });
+  up.addEventListener("dragleave", () => up.classList.remove("drag"));
+  up.addEventListener("drop", e => { e.preventDefault(); up.classList.remove("drag"); addFiles(e.dataTransfer.files); });
+
+  const vcard = (group, id, vis, title, sub) => `<button class="vcard" type="button" data-g="${group}" data-id="${id}" aria-pressed="${pick[group] === id}"><div class="vis ${vis.cls || ""}">${vis.html}</div><b>${title}</b>${sub ? `<small>${sub}</small>` : ""}</button>`;
+  $("#pickLayout").innerHTML = LAYOUTS.map(l => vcard("layout", l.id, { html: l.html }, l.name, "")).join("");
+  $("#pickType").innerHTML = TYPES.map(t => vcard("type", t.id, { html: `<div class="ts" style="font-family:${t.font};font-weight:${t.w}">${t.sample}</div>` }, t.name, "")).join("");
+  $("#pickFx").innerHTML = FX.map(f => vcard("fx", f.id, { cls: f.cls, html: f.inner }, f.name, f.res ? "在 " + byId[f.res].name + " 找" : "")).join("");
+  $("#pickBase").innerHTML = BASES.map(b => vcard("base", b.id, { cls: "cover", html: `<img src="${cover(b.id)}" alt="" loading="lazy">` }, byId[b.id].name, "元件底座")).join("");
+  $("#pickMotion").innerHTML = MOTIONS.map(m => vcard("motion", m.id, { cls: "cover", html: `<img src="${cover(m.id)}" alt="" loading="lazy">` }, byId[m.id].name, "動效")).join("");
+  document.querySelectorAll("#builder .cards").forEach(c => c.addEventListener("click", e => {
+    const b = e.target.closest(".vcard"); if (!b) return;
+    pick[b.dataset.g] = b.dataset.id;
+    c.querySelectorAll(".vcard").forEach(x => x.setAttribute("aria-pressed", x.dataset.id === b.dataset.id));
+    buildPrompt();
+  }));
+  $("#bType").addEventListener("input", buildPrompt);
+
+  function buildPrompt() {
+    if (!lastRoles) return;
+    const L = LAYOUTS.find(x => x.id === pick.layout), Ty = TYPES.find(x => x.id === pick.type), F = FX.find(x => x.id === pick.fx);
+    const B = BASES.find(x => x.id === pick.base), M = MOTIONS.find(x => x.id === pick.motion);
+    const refLines = refs.length ? refs.map((r, i) => `- 圖${i + 1}（${r.upload ? "我上傳的 " : ""}${r.name}）：參考它的 ${[...r.dims].join("、") || "整體感覺"}；其他部分不要照抄`).join("\n") : "- （沒有參考圖）";
+    $("#promptOut").textContent = `請幫我做「${$("#bType").value || "網站"}」的首頁。
+
+【參考圖】我會把下面這些圖片一起附上：
+${refLines}
+
+【版面】${L.name}：${L.d}。
+【字體】${Ty.name}：${Ty.d}。字體可以在 ${byId[Ty.src].name} 找。
+【唯一記憶點】${F.id === "none" ? "不放特效，維持穩定的資訊架構。" : `${F.name}：${F.d}。可參考 ${byId[F.res].name}（${byId[F.res].url}）的同類元件。其他區塊不要再加特效。`}
+【元件】${B.d}。
+【動效】${M.d}。
+
+【配色 Token】${lastHarm.name}（${lastHarm.zh}），${col.dark ? "深色" : "淺色"}模式。所有元件只能用這些顏色：
+${Object.entries(lastRoles).map(([k, v]) => `  --${k.replace(/[A-Z]/g, x => "-" + x.toLowerCase())}: ${v};`).join("\n")}
+
+【限制】
+- 80 / 15 / 5：80% 穩定資訊架構、15% 品牌視覺、5% 記憶點
+- 文字對比符合 WCAG 2.2 AA（一般文字 4.5:1、大字 3:1）
+- 375px 手機寬度不得水平捲動
+- 使用者開啟「減少動態效果」時關閉非必要動畫`;
+  }
+  $("#copyPrompt").addEventListener("click", () => copy($("#promptOut").textContent, "已複製 Prompt"));
+
+  // External links may be blocked inside the sandboxed viewer: copy the URL on click as a fallback.
+  document.addEventListener("click", e => {
+    const cp = e.target.closest("button[data-copy]");
+    if (cp) { copy(cp.dataset.copy, "已複製網址，貼到新分頁即可開啟"); return; }
+    const a = e.target.closest('a[href^="http"]');
+    if (a) navigator.clipboard?.writeText(a.href).then(() => toast("已複製網址：若沒有開啟，貼到新分頁即可"), () => {});
+  });
+
+  const navLinks = [...document.querySelectorAll(".nav a")];
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) navLinks.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + en.target.id)); }), { rootMargin: "-40% 0px -55% 0px" });
+  document.querySelectorAll("section.zone").forEach(s => io.observe(s));
+
+  // ---------- boot ----------
+  renderMatrix(); renderStep(); renderFilters(); renderGallery(); renderRecipe();
+  renderRefPick(); renderChosen();
+  paintColor(); paintCC();
+  renderDna();
+  document.fonts?.ready.then(() => { renderDna(); paintColor(); });
+})();
+</script>
+<!--SKELETON-->
+</body>
+</html>
+<!--/SKELETON-->
